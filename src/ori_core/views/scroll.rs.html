@@ -316,7 +316,9 @@
 <a href="#315" id="315">315</a>
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
-<a href="#318" id="318">318</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, is_mobile, Build, Styled};
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, is_mobile, Build, Styled};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, Color},
@@ -617,21 +619,23 @@
         <span class="kw">let </span>track_color = state.style.color.fade(<span class="number">0.7</span>);
         <span class="kw">let </span>knob_color = state.style.knob_color.fade(<span class="number">0.9</span>);
 
-        cx.quad(
-            <span class="self">self</span>.scrollbar_rect(<span class="kw-2">&amp;</span>state.style, cx.rect()),
-            track_color.fade(state.style.transition.get(state.t)),
-            state.style.border_radius,
-            <span class="number">0.0</span>,
-            Color::TRANSPARENT,
-        );
+        cx.hoverable(|cx| {
+            cx.quad(
+                <span class="self">self</span>.scrollbar_rect(<span class="kw-2">&amp;</span>state.style, cx.rect()),
+                track_color.fade(state.style.transition.get(state.t)),
+                state.style.border_radius,
+                <span class="number">0.0</span>,
+                Color::TRANSPARENT,
+            );
 
-        cx.quad(
-            <span class="self">self</span>.scrollbar_knob_rect(<span class="kw-2">&amp;</span>state.style, cx.rect(), overflow, state.scroll),
-            knob_color.fade(state.style.transition.get(state.t)),
-            state.style.border_radius,
-            <span class="number">0.0</span>,
-            Color::TRANSPARENT,
-        );
+            cx.quad(
+                <span class="self">self</span>.scrollbar_knob_rect(<span class="kw-2">&amp;</span>state.style, cx.rect(), overflow, state.scroll),
+                knob_color.fade(state.style.transition.get(state.t)),
+                state.style.border_radius,
+                <span class="number">0.0</span>,
+                Color::TRANSPARENT,
+            );
+        });
     }
 }
 </code></pre></div></section></main></body></html>
