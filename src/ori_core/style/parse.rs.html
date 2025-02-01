@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/ori-core/src/style/parse.rs`."><title>parse.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="ori_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">ori_core/style/</div>parse.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/ori-core/src/style/parse.rs`."><title>parse.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="ori_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">ori_core/style/</div>parse.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -365,7 +365,39 @@
 <a href="#364" id="364">364</a>
 <a href="#365" id="365">365</a>
 <a href="#366" id="366">366</a>
-<a href="#367" id="367">367</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::Any,
     error::Error,
     fmt::{<span class="self">self</span>, Debug, Display},
@@ -417,6 +449,7 @@
     Colon,
     Dot,
     Comma,
+    Dollar,
     OpenBrace,
     OpenBracket,
     CloseBrace,
@@ -447,11 +480,13 @@
     <span class="kw">let </span><span class="kw-2">mut </span>tokens = Vec::new();
 
     <span class="kw">while let </span><span class="prelude-val">Some</span>((c, lo)) = chars.next() {
-        <span class="kw">if </span>c.is_whitespace() {
+        <span class="comment">// skip whitespace
+        </span><span class="kw">if </span>c.is_whitespace() {
             <span class="kw">continue</span>;
         }
 
-        <span class="kw">if </span>is_ident_start(c) {
+        <span class="comment">// parse an identifier token
+        </span><span class="kw">if </span>is_ident_start(c) {
             <span class="kw">let </span><span class="kw-2">mut </span>hi = lo + c.len_utf8();
 
             <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>(c, idx)) = chars.peek() {
@@ -474,7 +509,8 @@
             <span class="kw">continue</span>;
         }
 
-        <span class="kw">if </span>c.is_ascii_digit() {
+        <span class="comment">// parse a number token
+        </span><span class="kw">if </span>c.is_ascii_digit() {
             <span class="kw">let </span><span class="kw-2">mut </span>hi = lo + c.len_utf8();
 
             <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>(c, idx)) = chars.peek() {
@@ -496,7 +532,19 @@
             <span class="kw">continue</span>;
         }
 
-        <span class="kw">if </span>c == <span class="string">'#' </span>{
+        <span class="comment">// parse a comment token
+        </span><span class="kw">if </span>c == <span class="string">'/' </span>&amp;&amp; chars.peek().map_or(<span class="bool-val">false</span>, |<span class="kw-2">&amp;</span>(c, <span class="kw">_</span>)| c == <span class="string">'/'</span>) {
+            <span class="kw">for </span>(c, <span class="kw">_</span>) <span class="kw">in </span>chars.by_ref() {
+                <span class="kw">if </span>c == <span class="string">'\n' </span>{
+                    <span class="kw">break</span>;
+                }
+            }
+
+            <span class="kw">continue</span>;
+        }
+
+        <span class="comment">// parse a hex color token
+        </span><span class="kw">if </span>c == <span class="string">'#' </span>{
             <span class="kw">let </span><span class="kw-2">mut </span>hi = lo + c.len_utf8();
 
             <span class="kw">for </span>(c, idx) <span class="kw">in </span>chars.by_ref() {
@@ -507,7 +555,11 @@
                 hi = idx + c.len_utf8();
             }
 
-            <span class="kw">let </span>color = Color::hex(<span class="kw-2">&amp;</span>s[lo + <span class="number">1</span>..hi]);
+            <span class="kw">let </span><span class="prelude-val">Some</span>(color) = Color::try_hex(<span class="kw-2">&amp;</span>s[lo + <span class="number">1</span>..hi]) <span class="kw">else </span>{
+                <span class="kw">return </span><span class="prelude-val">Err</span>(ParseError {
+                    message: <span class="macro">format!</span>(<span class="string">"invalid color: {:?}"</span>, <span class="kw-2">&amp;</span>s[lo..hi]),
+                });
+            };
 
             tokens.push(Token {
                 kind: TokenKind::Color(color),
@@ -517,14 +569,23 @@
             <span class="kw">continue</span>;
         }
 
-        <span class="kw">if </span>c == <span class="string">'"' </span>{
+        <span class="comment">// parse a string token
+        </span><span class="kw">if </span>c == <span class="string">'"' </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>terminated = <span class="bool-val">false</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>hi = lo + c.len_utf8();
 
             <span class="kw">for </span>(c, idx) <span class="kw">in </span>chars.by_ref() {
                 <span class="kw">if </span>c == <span class="string">'"' </span>{
                     hi = idx + c.len_utf8();
+                    terminated = <span class="bool-val">true</span>;
                     <span class="kw">break</span>;
                 }
+            }
+
+            <span class="kw">if </span>!terminated {
+                <span class="kw">return </span><span class="prelude-val">Err</span>(ParseError {
+                    message: <span class="string">"unterminated string"</span>.to_string(),
+                });
             }
 
             tokens.push(Token {
@@ -535,7 +596,8 @@
             <span class="kw">continue</span>;
         }
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(kind) = get_symbol(c) {
+        <span class="comment">// parse a symbol token
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(kind) = get_symbol(c) {
             tokens.push(Token {
                 kind,
                 span: lo..lo + c.len_utf8(),
@@ -565,6 +627,7 @@
         <span class="string">':' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::Colon),
         <span class="string">'.' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::Dot),
         <span class="string">',' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::Comma),
+        <span class="string">'$' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::Dollar),
         <span class="string">'{' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::OpenBrace),
         <span class="string">'}' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::CloseBrace),
         <span class="string">'[' </span>=&gt; <span class="prelude-val">Some</span>(TokenKind::OpenBracket),
@@ -614,7 +677,7 @@
     <span class="kw">match </span>token.kind {
         TokenKind::Colon =&gt; {
             <span class="kw">let </span>value = parse_value(tokens)<span class="question-mark">?</span>;
-            styles.insert_entry(<span class="kw-2">&amp;</span>key, value);
+            styles.insert_any(<span class="kw-2">&amp;</span>key, value);
 
             <span class="kw">if </span>!is(tokens, TokenKind::Comma) {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(ParseError {
@@ -652,23 +715,24 @@
     <span class="kw">let </span>token = next(tokens)<span class="question-mark">?</span>;
 
     <span class="kw">match </span>token.kind {
-        TokenKind::String(s) =&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new(s.to_string()))),
-        TokenKind::Number(n) =&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new(n))),
-        TokenKind::True =&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new(<span class="bool-val">true</span>))),
-        TokenKind::False =&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new(<span class="bool-val">false</span>))),
-        TokenKind::Color(color) =&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new(color))),
+        TokenKind::String(s) | TokenKind::Ident(s) =&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new(s.to_string()))),
+        TokenKind::Number(n) =&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new(n))),
+        TokenKind::True =&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new(<span class="bool-val">true</span>))),
+        TokenKind::False =&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new(<span class="bool-val">false</span>))),
+        TokenKind::Color(color) =&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new(color))),
 
-        TokenKind::Ident(ident) =&gt; {
-            <span class="kw">let </span><span class="kw-2">mut </span>key = String::from(ident);
+        TokenKind::Dollar =&gt; {
+            <span class="kw">let </span>root = expect_ident(next(tokens)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>key = String::from(root);
 
             <span class="kw">while </span>is(tokens, TokenKind::Dot) {
                 next(tokens)<span class="question-mark">?</span>;
-                <span class="kw">let </span>ident = expect_ident(next(tokens)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+                <span class="kw">let </span>segment = expect_ident(next(tokens)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
                 key.push(<span class="string">'.'</span>);
-                key.push_str(ident);
+                key.push_str(segment);
             }
 
-            <span class="prelude-val">Ok</span>(Styled::Style(Style::from_string(key)))
+            <span class="prelude-val">Ok</span>(Styled::style(Style::from_string(key)))
         }
 
         TokenKind::OpenBracket =&gt; {
@@ -694,8 +758,8 @@
             next(tokens)<span class="question-mark">?</span>;
 
             <span class="kw">match </span>v.len() {
-                <span class="number">2 </span>=&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new([v[<span class="number">0</span>], v[<span class="number">1</span>]]))),
-                <span class="number">4 </span>=&gt; <span class="prelude-val">Ok</span>(Styled::Value(Arc::new([v[<span class="number">0</span>], v[<span class="number">1</span>], v[<span class="number">2</span>], v[<span class="number">3</span>]]))),
+                <span class="number">2 </span>=&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new([v[<span class="number">0</span>], v[<span class="number">1</span>]]))),
+                <span class="number">4 </span>=&gt; <span class="prelude-val">Ok</span>(Styled::value(Arc::new([v[<span class="number">0</span>], v[<span class="number">1</span>], v[<span class="number">2</span>], v[<span class="number">3</span>]]))),
                 <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(ParseError {
                     message: <span class="macro">format!</span>(<span class="string">"expected 2 or 4 numbers, found {}"</span>, v.len()),
                 }),
