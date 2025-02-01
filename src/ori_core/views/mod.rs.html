@@ -227,7 +227,9 @@
 <a href="#226" id="226">226</a>
 <a href="#227" id="227">227</a>
 <a href="#228" id="228">228</a>
-<a href="#229" id="229">229</a></pre></div><pre class="rust"><code><span class="doccomment">//! The builtin views in Ori.
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a></pre></div><pre class="rust"><code><span class="doccomment">//! The builtin views in Ori.
 
 </span><span class="kw">mod </span>aligned;
 <span class="kw">mod </span>animate;
@@ -314,6 +316,7 @@
         context::{BaseCx, BuildCx, Contexts, DrawCx, EventCx, LayoutCx, RebuildCx},
         event::Event,
         layout::{Rect, Size, Space},
+        style::Styles,
         view::{View, ViewState},
         window::Window,
     };
@@ -334,6 +337,7 @@
 
             <span class="kw">let </span><span class="kw-2">mut </span>contexts = Contexts::new();
             contexts.insert(window);
+            contexts.insert(Styles::new());
 
             <span class="kw">let </span>(<span class="kw-2">mut </span>proxy, rx) = CommandProxy::new(waker);
 
