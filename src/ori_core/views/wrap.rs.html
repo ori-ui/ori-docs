@@ -338,7 +338,8 @@
 <a href="#337" id="337">337</a>
 <a href="#338" id="338">338</a>
 <a href="#339" id="339">339</a>
-<a href="#340" id="340">340</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Deref, Range};
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Deref, Range};
 
 <span class="kw">use </span>ori_macro::{example, Build, Styled};
 
@@ -572,6 +573,7 @@
         data: <span class="kw-2">&amp;mut </span>T,
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
+        Rebuild::rebuild(<span class="self">self</span>, cx, old);
         state.style.rebuild(<span class="self">self</span>, cx);
 
         <span class="kw">if </span><span class="self">self</span>.content.len() != old.content.len() {
