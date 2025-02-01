@@ -572,7 +572,7 @@
         data: <span class="kw-2">&amp;mut </span>T,
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
-        Rebuild::rebuild(<span class="self">self</span>, cx, old);
+        state.style.rebuild(<span class="self">self</span>, cx);
 
         <span class="kw">if </span><span class="self">self</span>.content.len() != old.content.len() {
             state.resize(<span class="self">self</span>.content.len());
