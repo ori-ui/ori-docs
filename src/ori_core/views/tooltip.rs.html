@@ -305,7 +305,9 @@
 <a href="#304" id="304">304</a>
 <a href="#305" id="305">305</a>
 <a href="#306" id="306">306</a>
-<a href="#307" id="307">307</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Styled};
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Styled};
 <span class="kw">use </span>smol_str::SmolStr;
 
 <span class="kw">use crate</span>::{
@@ -535,6 +537,8 @@
                 handled
             }
             Event::Animate(dt) =&gt; {
+                <span class="kw">let </span>old_timer = state.timer;
+
                 <span class="kw">if </span>content.has_hovered() &amp;&amp; state.timer &lt; <span class="number">1.0 </span>{
                     state.timer += dt / state.style.delay;
                     cx.animate();
@@ -546,7 +550,7 @@
 
                 state.timer = f32::clamp(state.timer, <span class="number">0.0</span>, <span class="number">1.0</span>);
 
-                <span class="kw">if </span>state.timer &gt;= <span class="number">0.9 </span>{
+                <span class="kw">if </span>state.timer &gt;= <span class="number">0.9 </span>&amp;&amp; state.timer != old_timer {
                     cx.draw();
                 }
 

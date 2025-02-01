@@ -966,7 +966,7 @@
         <span class="self">self</span>.window = cx.remove_context().expect(<span class="string">"Window context missing"</span>);
 
         <span class="macro">trace!</span>(
-            window = <span class="question-mark">?</span><span class="self">self</span>.window.id(),
+            window = %<span class="self">self</span>.window.id(),
             elapsed = <span class="question-mark">?</span>t.elapsed(),
             <span class="string">"Window event"
         </span>);
@@ -1006,7 +1006,7 @@
         }
 
         <span class="macro">trace!</span>(
-            window = <span class="question-mark">?</span><span class="self">self</span>.window.id(),
+            window = %<span class="self">self</span>.window.id(),
             elapsed = <span class="question-mark">?</span>t.elapsed(),
             <span class="string">"Window layout"
         </span>);
@@ -1026,7 +1026,7 @@
         <span class="self">self</span>.window = cx.remove_context().expect(<span class="string">"Window context missing"</span>);
 
         <span class="macro">trace!</span>(
-            window = <span class="question-mark">?</span><span class="self">self</span>.window.id(),
+            window = %<span class="self">self</span>.window.id(),
             elapsed = <span class="question-mark">?</span>t.elapsed(),
             <span class="string">"Window draw"
         </span>);
@@ -1622,7 +1622,7 @@
     ///
     /// Returns true if the event was handled by a delegate.
     </span><span class="kw">pub fn </span>window_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>T, window_id: WindowId, event: <span class="kw-2">&amp;</span>Event) -&gt; bool {
-        <span class="macro">trace!</span>(event = <span class="question-mark">?</span>event, window = <span class="question-mark">?</span>window_id, <span class="string">"Window event"</span>);
+        <span class="macro">trace!</span>(event = <span class="question-mark">?</span>event, window = %window_id, <span class="string">"Window event"</span>);
 
         <span class="comment">// we need to animate the window before handling the event
         </span><span class="kw">let </span>animate = Instant::now();
@@ -1689,7 +1689,7 @@
 
     <span class="doccomment">/// Draw a single window, returning the scene if it needs to be rendered.
     </span><span class="kw">pub fn </span>draw_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>T, window_id: WindowId) -&gt; <span class="prelude-ty">Option</span>&lt;WindowRenderState&gt; {
-        <span class="macro">trace!</span>(window = <span class="question-mark">?</span>window_id, <span class="string">"Draw window"</span>);
+        <span class="macro">trace!</span>(window = %window_id, <span class="string">"Draw window"</span>);
 
         <span class="comment">// animate the window before drawing it
         //

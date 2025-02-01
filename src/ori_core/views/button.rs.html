@@ -219,8 +219,7 @@
 <a href="#218" id="218">218</a>
 <a href="#219" id="219">219</a>
 <a href="#220" id="220">220</a>
-<a href="#221" id="221">221</a>
-<a href="#222" id="222">222</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build, Styled};
+<a href="#221" id="221">221</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build, Styled};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, BorderWidth, Color},
@@ -359,9 +358,8 @@
 
             <span class="kw">if </span>hover || active {
                 cx.animate();
+                cx.draw();
             }
-
-            cx.draw();
         }
 
         handled

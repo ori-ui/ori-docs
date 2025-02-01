@@ -296,11 +296,11 @@
 
         <span class="kw">if let </span>Event::Animate(dt) = event {
             <span class="kw">let </span>on = cx.is_hovered() &amp;&amp; !cx.is_active();
+
             <span class="kw">if </span>style.transition.step(t, on, <span class="kw-2">*</span>dt) {
                 cx.animate();
+                cx.draw();
             }
-
-            cx.draw();
         }
 
         <span class="bool-val">false

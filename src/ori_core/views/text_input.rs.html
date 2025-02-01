@@ -1475,7 +1475,7 @@
                 <span class="bool-val">true
             </span>}
 
-            Event::Animate(dt) =&gt; {
+            Event::Animate(dt) <span class="kw">if </span>cx.is_focused() =&gt; {
                 state.blink += <span class="kw-2">*</span>dt;
 
                 cx.draw();
