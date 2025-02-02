@@ -144,13 +144,24 @@
 <a href="#143" id="143">143</a>
 <a href="#144" id="144">144</a>
 <a href="#145" id="145">145</a>
-<a href="#146" id="146">146</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build, Styled};
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build, Styled};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, BorderWidth, Color, Curve, FillRule, Mask},
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
-    layout::{Size, Space},
+    layout::{Padding, Size, Space},
     rebuild::Rebuild,
     style::{Styled, Theme},
     view::{Pod, State, View},
@@ -206,6 +217,11 @@
     </span><span class="attr">#[rebuild(draw)]
     #[styled(default = <span class="bool-val">false</span>)]
     </span><span class="kw">pub </span>mask: Styled&lt;bool&gt;,
+
+    <span class="doccomment">/// The padding.
+    </span><span class="attr">#[rebuild(layout)]
+    #[styled(default)]
+    </span><span class="kw">pub </span>padding: Styled&lt;Padding&gt;,
 }
 
 <span class="kw">impl</span>&lt;V&gt; Container&lt;V&gt; {
@@ -218,6 +234,7 @@
             border_width: Styled::style(<span class="string">"container.border-width"</span>),
             border_color: Styled::style(<span class="string">"container.border-color"</span>),
             mask: Styled::style(<span class="string">"container.mask"</span>),
+            padding: Styled::style(<span class="string">"container.padding"</span>),
         }
     }
 }
@@ -258,12 +275,17 @@
 
     <span class="kw">fn </span>layout(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        (<span class="kw">_</span>, state): <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
+        (style, state): <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
         cx: <span class="kw-2">&amp;mut </span>LayoutCx,
         data: <span class="kw-2">&amp;mut </span>T,
         space: Space,
     ) -&gt; Size {
-        <span class="self">self</span>.content.layout(state, cx, data, space)
+        <span class="kw">let </span>content_space = space.shrink(style.padding.size());
+        <span class="kw">let </span>content_size = <span class="self">self</span>.content.layout(state, cx, data, content_space);
+
+        state.translate(style.padding.offset());
+
+        space.fit(content_size + style.padding.size())
     }
 
     <span class="kw">fn </span>draw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, (style, state): <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State, cx: <span class="kw-2">&amp;mut </span>DrawCx, data: <span class="kw-2">&amp;mut </span>T) {
