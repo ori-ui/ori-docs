@@ -263,11 +263,11 @@
     <span class="macro">quote::quote!</span>(#ident).into()
 }
 
-<span class="attr">#[manyhow::manyhow]
-#[proc_macro]
-</span><span class="doccomment">/// Load a font from a file or directory.
+<span class="doccomment">/// Load a font from a file or directory.
 ///
 /// The path is relative to the `Cargo.toml` file.
+</span><span class="attr">#[manyhow::manyhow]
+#[proc_macro]
 </span><span class="kw">pub fn </span>include_font(input: proc_macro::TokenStream) -&gt; manyhow::Result&lt;proc_macro::TokenStream&gt; {
     font::include_font(input)
 }
