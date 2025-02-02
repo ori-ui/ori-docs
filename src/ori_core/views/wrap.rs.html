@@ -339,16 +339,19 @@
 <a href="#338" id="338">338</a>
 <a href="#339" id="339">339</a>
 <a href="#340" id="340">340</a>
-<a href="#341" id="341">341</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Deref, Range};
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::{Deref, Range};
 
-<span class="kw">use </span>ori_macro::{example, Build, Styled};
+<span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
     layout::{Align, Axis, Justify, Size, Space},
     rebuild::Rebuild,
-    style::{Styled, Styles},
+    style::{Stylable, Styled, Styles},
     view::{AnyView, PodSeq, SeqState, View, ViewSeq},
 };
 
@@ -404,7 +407,7 @@
 ///
 /// Note that unlike [`Stack`](super::Stack) this view does not care about flex.
 </span><span class="attr">#[example(name = <span class="string">"wrap"</span>, width = <span class="number">400</span>, height = <span class="number">600</span>)]
-#[derive(Styled, Build, Rebuild)]
+#[derive(Stylable, Build, Rebuild)]
 </span><span class="kw">pub struct </span>Wrap&lt;V&gt; {
     <span class="doccomment">/// The content.
     </span><span class="attr">#[build(ignore)]
@@ -416,27 +419,27 @@
 
     <span class="doccomment">/// How to justify the content along the main axis.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>justify: Styled&lt;Justify&gt;,
 
     <span class="doccomment">/// How to align the content along the cross axis.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default = Align::Center)]
+    #[style(default = Align::Center)]
     </span><span class="kw">pub </span>align: Styled&lt;Align&gt;,
 
     <span class="doccomment">/// How to justify the content along the cross axis.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>justify_cross: Styled&lt;Justify&gt;,
 
     <span class="doccomment">/// The gap between each row.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>row_gap: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The gap between each column.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>column_gap: Styled&lt;f32&gt;,
 }
 
@@ -528,17 +531,20 @@
 }
 
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>WrapState {
-    style: WrapStyle,
+</span><span class="kw">pub struct </span>WrapState&lt;V&gt; {
+    style: WrapStyle&lt;V&gt;,
     majors: Vec&lt;f32&gt;,
     runs: Vec&lt;Range&lt;usize&gt;&gt;,
     run_minors: Vec&lt;f32&gt;,
 }
 
-<span class="kw">impl </span>WrapState {
-    <span class="kw">fn </span>new&lt;T, V: ViewSeq&lt;T&gt;&gt;(wrap: <span class="kw-2">&amp;</span>Wrap&lt;V&gt;, styles: <span class="kw-2">&amp;</span>Styles) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;V&gt; WrapState&lt;V&gt; {
+    <span class="kw">fn </span>new&lt;T&gt;(wrap: <span class="kw-2">&amp;</span>Wrap&lt;V&gt;, styles: <span class="kw-2">&amp;</span>Styles) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>V: ViewSeq&lt;T&gt;,
+    {
         <span class="self">Self </span>{
-            style: WrapStyle::styled(wrap, styles),
+            style: wrap.style(styles),
             majors: <span class="macro">vec!</span>[<span class="number">0.0</span>; wrap.content.len()],
             runs: Vec::new(),
             run_minors: Vec::new(),
@@ -555,7 +561,7 @@
 }
 
 <span class="kw">impl</span>&lt;T, V: ViewSeq&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Wrap&lt;V&gt; {
-    <span class="kw">type </span>State = (WrapState, SeqState&lt;T, V&gt;);
+    <span class="kw">type </span>State = (WrapState&lt;V&gt;, SeqState&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
         cx.set_class(<span class="string">"wrap"</span>);

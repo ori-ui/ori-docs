@@ -346,7 +346,7 @@
 <a href="#345" id="345">345</a>
 <a href="#346" id="346">346</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::f32::consts::{FRAC_PI_2, PI, TAU};
 
-<span class="kw">use </span>ori_macro::{Build, Styled};
+<span class="kw">use </span>ori_macro::Build;
 
 <span class="kw">use crate</span>::{
     canvas::{Color, Curve, FillRule, Pattern},
@@ -355,7 +355,7 @@
     image::Image,
     layout::{Affine, Point, Rect, Size, Space, Vector},
     rebuild::Rebuild,
-    style::{Styled, Theme},
+    style::{Stylable, Styled, Theme},
     view::View,
 };
 
@@ -365,7 +365,7 @@
 }
 
 <span class="doccomment">/// A color picker.
-</span><span class="attr">#[derive(Styled, Build, Rebuild)]
+</span><span class="attr">#[derive(Stylable, Build, Rebuild)]
 </span><span class="kw">pub struct </span>ColorPicker&lt;T&gt; {
     <span class="doccomment">/// The color of the color picker.
     </span><span class="attr">#[rebuild(draw)]
@@ -378,32 +378,32 @@
 
     <span class="doccomment">/// The size of the color picker.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default = <span class="number">128.0</span>)]
+    #[style(default = <span class="number">128.0</span>)]
     </span><span class="kw">pub </span>size: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The border width of the color picker.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = <span class="number">2.0</span>)]
+    #[style(default = <span class="number">2.0</span>)]
     </span><span class="kw">pub </span>border_width: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The border color of the color picker.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::OUTLINE or Color::BLACK)]
+    #[style(default -&gt; Theme::OUTLINE or Color::BLACK)]
     </span><span class="kw">pub </span>border_color: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The width of the sliders.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = <span class="number">12.0</span>)]
+    #[style(default = <span class="number">12.0</span>)]
     </span><span class="kw">pub </span>slider_width: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The color of the lightness slider.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::PRIMARY or Color::BLUE)]
+    #[style(default -&gt; Theme::PRIMARY or Color::BLUE)]
     </span><span class="kw">pub </span>lightness_color: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The color of the alpha slider.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::ACCENT or Color::RED)]
+    #[style(default -&gt; Theme::ACCENT or Color::RED)]
     </span><span class="kw">pub </span>alpha_color: Styled&lt;Color&gt;,
 }
 
@@ -466,7 +466,7 @@
 
     <span class="kw">fn </span>input(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        state: <span class="kw-2">&amp;mut </span>ColorPickerState,
+        state: <span class="kw-2">&amp;mut </span>ColorPickerState&lt;T&gt;,
         cx: <span class="kw-2">&amp;mut </span>EventCx,
         data: <span class="kw-2">&amp;mut </span>T,
         position: Point,
@@ -529,26 +529,26 @@
 }
 
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>ColorPickerState {
-    style: ColorPickerStyle,
+</span><span class="kw">pub struct </span>ColorPickerState&lt;T&gt; {
+    style: ColorPickerStyle&lt;T&gt;,
     image: <span class="prelude-ty">Option</span>&lt;Image&gt;,
     edit: <span class="prelude-ty">Option</span>&lt;ColorPickerPart&gt;,
 }
 
-<span class="kw">impl </span>ColorPickerState {
+<span class="kw">impl</span>&lt;T&gt; ColorPickerState&lt;T&gt; {
     <span class="kw">fn </span>can_edit(<span class="kw-2">&amp;</span><span class="self">self</span>, part: ColorPickerPart, inside: bool) -&gt; bool {
         <span class="self">self</span>.edit.map_or(inside, |edit| edit == part)
     }
 }
 
 <span class="kw">impl</span>&lt;T&gt; View&lt;T&gt; <span class="kw">for </span>ColorPicker&lt;T&gt; {
-    <span class="kw">type </span>State = ColorPickerState;
+    <span class="kw">type </span>State = ColorPickerState&lt;T&gt;;
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, _data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
         cx.set_class(<span class="string">"color-picker"</span>);
 
         ColorPickerState {
-            style: ColorPickerStyle::styled(<span class="self">self</span>, cx.styles()),
+            style: <span class="self">self</span>.style(cx.styles()),
             image: <span class="prelude-val">None</span>,
             edit: <span class="prelude-val">None</span>,
         }

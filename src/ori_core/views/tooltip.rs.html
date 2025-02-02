@@ -307,7 +307,7 @@
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
 <a href="#308" id="308">308</a>
-<a href="#309" id="309">309</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Styled};
+<a href="#309" id="309">309</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::example;
 <span class="kw">use </span>smol_str::SmolStr;
 
 <span class="kw">use crate</span>::{
@@ -316,7 +316,7 @@
     event::Event,
     layout::{pt, Padding, Point, Rect, Size, Space, Vector},
     rebuild::Rebuild,
-    style::{Styled, Theme},
+    style::{Stylable, Styled, Theme},
     text::{
         FontAttributes, FontFamily, FontStretch, FontStyle, FontWeight, Paragraph, TextAlign,
         TextWrap,
@@ -333,7 +333,7 @@
 ///
 /// Can be styled using the [`TooltipStyle`].
 </span><span class="attr">#[example(name = <span class="string">"tooltip"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Styled, Rebuild)]
+#[derive(Stylable, Rebuild)]
 </span><span class="kw">pub struct </span>Tooltip&lt;V&gt; {
     <span class="doccomment">/// The content to display.
     </span><span class="kw">pub </span>content: Pod&lt;V&gt;,
@@ -343,69 +343,69 @@
     </span><span class="kw">pub </span>text: SmolStr,
 
     <span class="doccomment">/// The delay before the tooltip is displayed.
-    </span><span class="attr">#[styled(default = <span class="number">0.2</span>)]
+    </span><span class="attr">#[style(default = <span class="number">0.2</span>)]
     </span><span class="kw">pub </span>delay: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The padding of the text.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default = Padding::all(<span class="number">4.0</span>))]
+    #[style(default = Padding::all(<span class="number">4.0</span>))]
     </span><span class="kw">pub </span>padding: Styled&lt;Padding&gt;,
 
     <span class="doccomment">/// The font size of the text.
-    </span><span class="attr">#[styled(default = pt(<span class="number">10.0</span>))]
+    </span><span class="attr">#[style(default = pt(<span class="number">10.0</span>))]
     </span><span class="kw">pub </span>font_size: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The font family of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     </span><span class="kw">pub </span>font_family: Styled&lt;FontFamily&gt;,
 
     <span class="doccomment">/// The font weight of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     </span><span class="kw">pub </span>font_weight: Styled&lt;FontWeight&gt;,
 
     <span class="doccomment">/// The font stretch of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     </span><span class="kw">pub </span>font_stretch: Styled&lt;FontStretch&gt;,
 
     <span class="doccomment">/// The font style of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     </span><span class="kw">pub </span>font_style: Styled&lt;FontStyle&gt;,
 
     <span class="doccomment">/// The color of text.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::CONTRAST or Color::BLACK)]
+    #[style(default -&gt; Theme::CONTRAST or Color::BLACK)]
     </span><span class="kw">pub </span>color: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The horizontal alignment of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     </span><span class="kw">pub </span>align: Styled&lt;TextAlign&gt;,
 
     <span class="doccomment">/// The line height of the text.
-    </span><span class="attr">#[styled(default = <span class="number">1.2</span>)]
+    </span><span class="attr">#[style(default = <span class="number">1.2</span>)]
     </span><span class="kw">pub </span>line_height: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The text wrap of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     </span><span class="kw">pub </span>wrap: Styled&lt;TextWrap&gt;,
 
     <span class="doccomment">/// The background color of the text.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::SURFACE_HIGHER or Color::WHITE)]
+    #[style(default -&gt; Theme::SURFACE_HIGHER or Color::WHITE)]
     </span><span class="kw">pub </span>background: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The border radius of the text.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = BorderRadius::all(<span class="number">4.0</span>))]
+    #[style(default = BorderRadius::all(<span class="number">4.0</span>))]
     </span><span class="kw">pub </span>border_radius: Styled&lt;BorderRadius&gt;,
 
     <span class="doccomment">/// The border width of the text.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = BorderWidth::all(<span class="number">1.0</span>))]
+    #[style(default = BorderWidth::all(<span class="number">1.0</span>))]
     </span><span class="kw">pub </span>border_width: Styled&lt;BorderWidth&gt;,
 
     <span class="doccomment">/// The border color of the text.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::OUTLINE or Color::BLACK)]
+    #[style(default -&gt; Theme::OUTLINE or Color::BLACK)]
     </span><span class="kw">pub </span>border_color: Styled&lt;Color&gt;,
 }
 
@@ -435,20 +435,20 @@
 }
 
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>TooltipState {
+</span><span class="kw">pub struct </span>TooltipState&lt;V&gt; {
     <span class="kw">pub </span>paragraph: Paragraph,
     <span class="kw">pub </span>timer: f32,
     <span class="kw">pub </span>position: Point,
-    <span class="kw">pub </span>style: TooltipStyle,
+    <span class="kw">pub </span>style: TooltipStyle&lt;V&gt;,
 }
 
 <span class="kw">impl</span>&lt;T, V: View&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Tooltip&lt;V&gt; {
-    <span class="kw">type </span>State = (TooltipState, State&lt;T, V&gt;);
+    <span class="kw">type </span>State = (TooltipState&lt;V&gt;, State&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
         cx.set_class(<span class="string">"tooltip"</span>);
 
-        <span class="kw">let </span>style = TooltipStyle::styled(<span class="self">self</span>, cx.styles());
+        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.styles());
 
         <span class="kw">let </span><span class="kw-2">mut </span>state = TooltipState {
             paragraph: Paragraph::new(style.line_height, style.align, style.wrap),

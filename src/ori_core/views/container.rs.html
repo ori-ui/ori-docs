@@ -154,8 +154,7 @@
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
 <a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a>
-<a href="#157" id="157">157</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build, Styled};
+<a href="#156" id="156">156</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, BorderWidth, Color, Curve, FillRule, Mask},
@@ -163,7 +162,7 @@
     event::Event,
     layout::{Padding, Size, Space},
     rebuild::Rebuild,
-    style::{Styled, Theme},
+    style::{Stylable, Styled, Theme},
     view::{Pod, State, View},
 };
 
@@ -187,7 +186,7 @@
 
 <span class="doccomment">/// A container view.
 </span><span class="attr">#[example(name = <span class="string">"container"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Styled, Build, Rebuild)]
+#[derive(Stylable, Build, Rebuild)]
 </span><span class="kw">pub struct </span>Container&lt;V&gt; {
     <span class="doccomment">/// The content.
     </span><span class="attr">#[build(ignore)]
@@ -195,32 +194,32 @@
 
     <span class="doccomment">/// The background color.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::SURFACE or Color::WHITE)]
+    #[style(default -&gt; Theme::SURFACE or Color::WHITE)]
     </span><span class="kw">pub </span>background: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The border radius.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>border_radius: Styled&lt;BorderRadius&gt;,
 
     <span class="doccomment">/// The border width.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>border_width: Styled&lt;BorderWidth&gt;,
 
     <span class="doccomment">/// The border color.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::OUTLINE or Color::BLACK)]
+    #[style(default -&gt; Theme::OUTLINE or Color::BLACK)]
     </span><span class="kw">pub </span>border_color: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// Whether to mask the content.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = <span class="bool-val">false</span>)]
+    #[style(default = <span class="bool-val">false</span>)]
     </span><span class="kw">pub </span>mask: Styled&lt;bool&gt;,
 
     <span class="doccomment">/// The padding.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>padding: Styled&lt;Padding&gt;,
 }
 
@@ -240,13 +239,12 @@
 }
 
 <span class="kw">impl</span>&lt;T, V: View&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Container&lt;V&gt; {
-    <span class="kw">type </span>State = (ContainerStyle, State&lt;T, V&gt;);
+    <span class="kw">type </span>State = (ContainerStyle&lt;V&gt;, State&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
         cx.set_class(<span class="string">"container"</span>);
 
-        <span class="kw">let </span>style = ContainerStyle::styled(<span class="self">self</span>, cx.styles());
-
+        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.styles());
         (style, <span class="self">self</span>.content.build(cx, data))
     }
 

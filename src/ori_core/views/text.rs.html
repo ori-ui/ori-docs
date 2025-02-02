@@ -184,7 +184,7 @@
 <a href="#183" id="183">183</a>
 <a href="#184" id="184">184</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Write};
 
-<span class="kw">use </span>ori_macro::{example, Build, Styled};
+<span class="kw">use </span>ori_macro::{example, Build};
 <span class="kw">use </span>smol_str::SmolStr;
 
 <span class="kw">use crate</span>::{
@@ -193,7 +193,7 @@
     event::Event,
     layout::{Size, Space},
     rebuild::Rebuild,
-    style::{Styled, Theme},
+    style::{Stylable, Styled, Theme},
     text::{
         FontAttributes, FontFamily, FontStretch, FontStyle, FontWeight, Paragraph, TextAlign,
         TextWrap,
@@ -224,54 +224,54 @@
 ///
 /// Can be styled using the [`TextStyle`].
 </span><span class="attr">#[example(name = <span class="string">"text"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Styled, Build, Rebuild)]
+#[derive(Stylable, Build, Rebuild)]
 </span><span class="kw">pub struct </span>Text {
     <span class="doccomment">/// The text.
     </span><span class="attr">#[rebuild(layout)]
     </span><span class="kw">pub </span>text: SmolStr,
 
     <span class="doccomment">/// The font size of the text.
-    </span><span class="attr">#[styled(default = <span class="number">16.0</span>)]
+    </span><span class="attr">#[style(default = <span class="number">16.0</span>)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>font_size: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The font family of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>font_family: Styled&lt;FontFamily&gt;,
 
     <span class="doccomment">/// The font weight of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>font_weight: Styled&lt;FontWeight&gt;,
 
     <span class="doccomment">/// The font stretch of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>font_stretch: Styled&lt;FontStretch&gt;,
 
     <span class="doccomment">/// The font.into of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>font_style: Styled&lt;FontStyle&gt;,
 
     <span class="doccomment">/// The color of the text.
-    </span><span class="attr">#[styled(default -&gt; Theme::CONTRAST or Color::BLACK)]
+    </span><span class="attr">#[style(default -&gt; Theme::CONTRAST or Color::BLACK)]
     #[rebuild(draw)]
     </span><span class="kw">pub </span>color: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The horizontal alignment of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>align: Styled&lt;TextAlign&gt;,
 
     <span class="doccomment">/// The line height of the text.
-    </span><span class="attr">#[styled(default = <span class="number">1.2</span>)]
+    </span><span class="attr">#[style(default = <span class="number">1.2</span>)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>line_height: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The text wrap of the text.
-    </span><span class="attr">#[styled(default)]
+    </span><span class="attr">#[style(default)]
     #[rebuild(layout)]
     </span><span class="kw">pub </span>wrap: Styled&lt;TextWrap&gt;,
 }
@@ -310,7 +310,7 @@
     <span class="kw">type </span>State = (TextStyle, Paragraph);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, _data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        <span class="kw">let </span>style = TextStyle::styled(<span class="self">self</span>, cx.styles());
+        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.styles());
 
         <span class="kw">let </span><span class="kw-2">mut </span>paragraph = Paragraph::new(style.line_height, style.align, style.wrap);
         paragraph.push_text(<span class="kw-2">&amp;</span><span class="self">self</span>.text, <span class="self">self</span>.font_attributes(<span class="kw-2">&amp;</span>style));

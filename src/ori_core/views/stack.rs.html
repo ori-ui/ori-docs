@@ -397,16 +397,19 @@
 <a href="#396" id="396">396</a>
 <a href="#397" id="397">397</a>
 <a href="#398" id="398">398</a>
-<a href="#399" id="399">399</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::Deref;
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::Deref;
 
-<span class="kw">use </span>ori_macro::{example, Build, Styled};
+<span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
     layout::{Align, Axis, Justify, Size, Space},
     rebuild::Rebuild,
-    style::{Styled, Styles},
+    style::{Stylable, Styled, Styles},
     view::{AnyView, PodSeq, SeqState, View, ViewSeq},
 };
 
@@ -462,7 +465,7 @@
 
 <span class="doccomment">/// A view that stacks it's content in a line.
 </span><span class="attr">#[example(name = <span class="string">"stack"</span>, width = <span class="number">400</span>, height = <span class="number">600</span>)]
-#[derive(Styled, Build, Rebuild)]
+#[derive(Stylable, Build, Rebuild)]
 </span><span class="kw">pub struct </span>Stack&lt;V&gt; {
     <span class="doccomment">/// The content of the stack.
     </span><span class="attr">#[build(ignore)]
@@ -474,17 +477,17 @@
 
     <span class="doccomment">/// How to justify the content along the main axis.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>justify: Styled&lt;Justify&gt;,
 
     <span class="doccomment">/// How to align the content along the cross axis, within each line.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default = Align::Center)]
+    #[style(default = Align::Center)]
     </span><span class="kw">pub </span>align: Styled&lt;Align&gt;,
 
     <span class="doccomment">/// The gap between children.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default)]
+    #[style(default)]
     </span><span class="kw">pub </span>gap: Styled&lt;f32&gt;,
 }
 
@@ -567,17 +570,20 @@
 }
 
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>StackState {
-    style: StackStyle,
+</span><span class="kw">pub struct </span>StackState&lt;V&gt; {
+    style: StackStyle&lt;V&gt;,
     flex_sum: f32,
     majors: Vec&lt;f32&gt;,
     minors: Vec&lt;f32&gt;,
 }
 
-<span class="kw">impl </span>StackState {
-    <span class="kw">fn </span>new&lt;T, V: ViewSeq&lt;T&gt;&gt;(stack: <span class="kw-2">&amp;</span>Stack&lt;V&gt;, styles: <span class="kw-2">&amp;</span>Styles) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;V&gt; StackState&lt;V&gt; {
+    <span class="kw">fn </span>new&lt;T&gt;(stack: <span class="kw-2">&amp;</span>Stack&lt;V&gt;, styles: <span class="kw-2">&amp;</span>Styles) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>V: ViewSeq&lt;T&gt;,
+    {
         <span class="self">Self </span>{
-            style: StackStyle::styled(stack, styles),
+            style: stack.style(styles),
             flex_sum: <span class="number">0.0</span>,
             majors: <span class="macro">vec!</span>[<span class="number">0.0</span>; stack.content.len()],
             minors: <span class="macro">vec!</span>[<span class="number">0.0</span>; stack.content.len()],
@@ -605,7 +611,7 @@
 }
 
 <span class="kw">impl</span>&lt;T, V: ViewSeq&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Stack&lt;V&gt; {
-    <span class="kw">type </span>State = (StackState, SeqState&lt;T, V&gt;);
+    <span class="kw">type </span>State = (StackState&lt;V&gt;, SeqState&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
         cx.set_class(<span class="string">"stack"</span>);
@@ -716,7 +722,7 @@
     stack: <span class="kw-2">&amp;mut </span>Stack&lt;V&gt;,
     cx: <span class="kw-2">&amp;mut </span>LayoutCx,
     content: <span class="kw-2">&amp;mut </span>SeqState&lt;T, V&gt;,
-    state: <span class="kw-2">&amp;mut </span>StackState,
+    state: <span class="kw-2">&amp;mut </span>StackState&lt;V&gt;,
     data: <span class="kw-2">&amp;mut </span>T,
     max_major: f32,
     min_minor: f32,

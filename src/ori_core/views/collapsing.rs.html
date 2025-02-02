@@ -269,7 +269,7 @@
 <a href="#268" id="268">268</a>
 <a href="#269" id="269">269</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::f32::consts::{PI, SQRT_2};
 
-<span class="kw">use </span>ori_macro::{example, Build, Styled};
+<span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, BorderWidth, Color, Curve, FillRule},
@@ -277,7 +277,7 @@
     event::{Event, PointerButton},
     layout::{Affine, Point, Rect, Size, Space, Vector},
     rebuild::Rebuild,
-    style::{Styled, Theme},
+    style::{Stylable, Styled, Theme},
     transition::Transition,
     view::{Pod, State, View},
 };
@@ -291,7 +291,7 @@
 ///
 /// Can be styled using the [`CollapsingStyle`].
 </span><span class="attr">#[example(name = <span class="string">"collapsing"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Styled, Build, Rebuild)]
+#[derive(Stylable, Build, Rebuild)]
 </span><span class="kw">pub struct </span>Collapsing&lt;T, H, V&gt; {
     <span class="doccomment">/// The header.
     </span><span class="attr">#[build(ignore)]
@@ -314,37 +314,37 @@
     </span><span class="kw">pub </span>default_open: bool,
 
     <span class="doccomment">/// The transition of the view.
-    </span><span class="attr">#[styled(default = Transition::ease(<span class="number">0.1</span>))]
+    </span><span class="attr">#[style(default = Transition::ease(<span class="number">0.1</span>))]
     </span><span class="kw">pub </span>transition: Styled&lt;Transition&gt;,
 
     <span class="doccomment">/// The size of the icon.
     </span><span class="attr">#[rebuild(layout)]
-    #[styled(default = <span class="number">16.0</span>)]
+    #[style(default = <span class="number">16.0</span>)]
     </span><span class="kw">pub </span>icon_size: Styled&lt;f32&gt;,
 
     <span class="doccomment">/// The color of the icon.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::PRIMARY or Color::BLUE)]
+    #[style(default -&gt; Theme::PRIMARY or Color::BLUE)]
     </span><span class="kw">pub </span>icon_color: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The background color of the header.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = Color::TRANSPARENT)]
+    #[style(default = Color::TRANSPARENT)]
     </span><span class="kw">pub </span>background: Styled&lt;Color&gt;,
 
     <span class="doccomment">/// The border width of the header.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = BorderWidth::new(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>))]
+    #[style(default = BorderWidth::new(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>))]
     </span><span class="kw">pub </span>border_width: Styled&lt;BorderWidth&gt;,
 
     <span class="doccomment">/// The border radius of the header.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default = BorderRadius::all(<span class="number">0.0</span>))]
+    #[style(default = BorderRadius::all(<span class="number">0.0</span>))]
     </span><span class="kw">pub </span>border_radius: Styled&lt;BorderRadius&gt;,
 
     <span class="doccomment">/// The color of the border of the header.
     </span><span class="attr">#[rebuild(draw)]
-    #[styled(default -&gt; Theme::OUTLINE or Color::BLACK)]
+    #[style(default -&gt; Theme::OUTLINE or Color::BLACK)]
     </span><span class="kw">pub </span>border_color: Styled&lt;Color&gt;,
 }
 
@@ -376,7 +376,7 @@
 
 <span class="attr">#[doc(hidden)]
 </span><span class="kw">pub struct </span>CollapsingState&lt;T, H: View&lt;T&gt;, V: View&lt;T&gt;&gt; {
-    style: CollapsingStyle,
+    style: CollapsingStyle&lt;T, H, V&gt;,
     header: State&lt;T, H&gt;,
     content: State&lt;T, V&gt;,
     open: bool,
@@ -392,7 +392,7 @@
         <span class="kw">let </span>open = <span class="self">self</span>.open.unwrap_or(<span class="self">self</span>.default_open);
 
         CollapsingState {
-            style: CollapsingStyle::styled(<span class="self">self</span>, cx.styles()),
+            style: <span class="self">self</span>.style(cx.styles()),
             header: <span class="self">self</span>.header.build(cx, data),
             content: <span class="self">self</span>.content.build(cx, data),
             open,

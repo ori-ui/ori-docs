@@ -216,7 +216,7 @@
 <span class="kw">mod </span>example;
 <span class="kw">mod </span>font;
 <span class="kw">mod </span>rebuild;
-<span class="kw">mod </span>styled;
+<span class="kw">mod </span>stylable;
 
 <span class="kw">fn </span>found_crate(krate: proc_macro_crate::FoundCrate) -&gt; syn::Path {
     <span class="kw">match </span>krate {
@@ -274,7 +274,7 @@
 
 <span class="doccomment">/// Derive the `Rebuild` trait.
 </span><span class="attr">#[manyhow::manyhow]
-#[proc_macro_derive(Rebuild, attributes(styled, rebuild))]
+#[proc_macro_derive(Rebuild, attributes(style, rebuild))]
 </span><span class="kw">pub fn </span>derive_rebuild(input: proc_macro::TokenStream) -&gt; manyhow::Result&lt;proc_macro::TokenStream&gt; {
     rebuild::derive_rebuild(input)
 }
@@ -288,9 +288,9 @@
 
 <span class="doccomment">/// Derived the styled pattern.
 </span><span class="attr">#[manyhow::manyhow]
-#[proc_macro_derive(Styled, attributes(styled, rebuild))]
-</span><span class="kw">pub fn </span>derive_styled(input: proc_macro::TokenStream) -&gt; manyhow::Result&lt;proc_macro::TokenStream&gt; {
-    styled::derive_styled(input)
+#[proc_macro_derive(Stylable, attributes(style, rebuild))]
+</span><span class="kw">pub fn </span>derive_stylable(input: proc_macro::TokenStream) -&gt; manyhow::Result&lt;proc_macro::TokenStream&gt; {
+    stylable::derive_stylable(input)
 }
 
 <span class="doccomment">/// Only include the annotated item on desktop platforms.
