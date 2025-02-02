@@ -874,7 +874,9 @@
 <a href="#873" id="873">873</a>
 <a href="#874" id="874">874</a>
 <a href="#875" id="875">875</a>
-<a href="#876" id="876">876</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, collections::HashMap};
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, collections::HashMap};
 
 <span class="kw">use </span>instant::Instant;
 <span class="kw">use </span>ori_core::{
@@ -928,15 +930,14 @@
 
         <span class="self">self</span>.view_state.prepare();
 
+        base.insert_context(<span class="self">self</span>.window.clone());
+
         <span class="kw">let </span><span class="kw-2">mut </span>cx = RebuildCx::new(base, <span class="kw-2">&amp;mut </span><span class="self">self</span>.view_state);
-
         <span class="kw">let </span><span class="kw-2">mut </span>new_view = (<span class="self">self</span>.ui)(data);
-
-        cx.insert_context(<span class="self">self</span>.window.clone());
         new_view.rebuild(<span class="kw-2">&amp;mut </span><span class="self">self</span>.state, <span class="kw-2">&amp;mut </span>cx, data, <span class="kw-2">&amp;</span><span class="self">self</span>.view);
-        <span class="self">self</span>.window = cx.remove_context().expect(<span class="string">"Window context missing"</span>);
-
         <span class="self">self</span>.view = new_view;
+
+        <span class="self">self</span>.window = base.remove_context().expect(<span class="string">"Window context missing"</span>);
 
         <span class="macro">trace!</span>(
             window = <span class="question-mark">?</span><span class="self">self</span>.window.id(),
@@ -959,11 +960,12 @@
         <span class="self">self</span>.view_state.set_hovered(hovered);
         <span class="self">self</span>.view_state.prepare();
 
-        <span class="kw">let </span><span class="kw-2">mut </span>cx = EventCx::new(base, <span class="kw-2">&amp;mut </span><span class="self">self</span>.view_state, rebuild);
+        base.insert_context(<span class="self">self</span>.window.clone());
 
-        cx.insert_context(<span class="self">self</span>.window.clone());
+        <span class="kw">let </span><span class="kw-2">mut </span>cx = EventCx::new(base, <span class="kw-2">&amp;mut </span><span class="self">self</span>.view_state, rebuild);
         <span class="kw">let </span>handled = <span class="self">self</span>.view.event(<span class="kw-2">&amp;mut </span><span class="self">self</span>.state, <span class="kw-2">&amp;mut </span>cx, data, event);
-        <span class="self">self</span>.window = cx.remove_context().expect(<span class="string">"Window context missing"</span>);
+
+        <span class="self">self</span>.window = base.remove_context().expect(<span class="string">"Window context missing"</span>);
 
         <span class="macro">trace!</span>(
             window = %<span class="self">self</span>.window.id(),
@@ -979,6 +981,8 @@
 
         <span class="self">self</span>.view_state.mark_layed_out();
 
+        base.insert_context(<span class="self">self</span>.window.clone());
+
         <span class="comment">// we need to calculate the max size of the window
         // depending on the sizing of the window
         </span><span class="kw">let </span>max_size = <span class="kw">match </span><span class="self">self</span>.window.sizing {
@@ -988,10 +992,9 @@
 
         <span class="kw">let </span>space = Space::new(Size::ZERO, max_size);
         <span class="kw">let </span><span class="kw-2">mut </span>cx = LayoutCx::new(base, <span class="kw-2">&amp;mut </span><span class="self">self</span>.view_state);
-
-        cx.insert_context(<span class="self">self</span>.window.clone());
         <span class="kw">let </span>size = <span class="self">self</span>.view.layout(<span class="kw-2">&amp;mut </span><span class="self">self</span>.state, <span class="kw-2">&amp;mut </span>cx, data, space);
-        <span class="self">self</span>.window = cx.remove_context().expect(<span class="string">"Window context missing"</span>);
+
+        <span class="self">self</span>.window = base.remove_context().expect(<span class="string">"Window context missing"</span>);
 
         <span class="self">self</span>.view_state.set_size(size);
 
@@ -1019,11 +1022,12 @@
 
         <span class="self">self</span>.canvas.clear();
 
-        <span class="kw">let </span><span class="kw-2">mut </span>cx = DrawCx::new(base, <span class="kw-2">&amp;mut </span><span class="self">self</span>.view_state, <span class="kw-2">&amp;mut </span><span class="self">self</span>.canvas);
+        base.insert_context(<span class="self">self</span>.window.clone());
 
-        cx.insert_context(<span class="self">self</span>.window.clone());
+        <span class="kw">let </span><span class="kw-2">mut </span>cx = DrawCx::new(base, <span class="kw-2">&amp;mut </span><span class="self">self</span>.view_state, <span class="kw-2">&amp;mut </span><span class="self">self</span>.canvas);
         <span class="self">self</span>.view.draw(<span class="kw-2">&amp;mut </span><span class="self">self</span>.state, <span class="kw-2">&amp;mut </span>cx, data);
-        <span class="self">self</span>.window = cx.remove_context().expect(<span class="string">"Window context missing"</span>);
+
+        <span class="self">self</span>.window = base.remove_context().expect(<span class="string">"Window context missing"</span>);
 
         <span class="macro">trace!</span>(
             window = %<span class="self">self</span>.window.id(),

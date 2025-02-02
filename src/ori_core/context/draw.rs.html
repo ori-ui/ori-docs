@@ -277,7 +277,11 @@
 <a href="#276" id="276">276</a>
 <a href="#277" id="277">277</a>
 <a href="#278" id="278">278</a>
-<a href="#279" id="279">279</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt::Display,
     ops::{Deref, DerefMut},
 };
@@ -287,6 +291,7 @@
     layout::{Affine, Point, Rect, Size, Vector},
     text::{FontAttributes, Paragraph, TextAlign, TextWrap},
     view::ViewState,
+    window::Window,
 };
 
 <span class="kw">use </span><span class="kw">super</span>::BaseCx;
@@ -323,12 +328,15 @@
         view_state: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>ViewState,
         canvas: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>Canvas,
     ) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>window_size = base.context::&lt;Window&gt;().size;
+        <span class="kw">let </span>visible = Rect::min_size(Point::ZERO, window_size);
+
         <span class="self">Self </span>{
             base,
             view_state,
             transform: Affine::IDENTITY,
             canvas,
-            visible: <span class="self">Self</span>::EVERYTHING,
+            visible,
         }
     }
 
