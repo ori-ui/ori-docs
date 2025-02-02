@@ -281,7 +281,10 @@
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
 <a href="#282" id="282">282</a>
-<a href="#283" id="283">283</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt::Display,
     ops::{Deref, DerefMut},
 };
@@ -495,7 +498,7 @@
                 view_state: <span class="self">self</span>.view_state,
                 transform: <span class="self">self</span>.transform,
                 canvas,
-                visible: <span class="self">Self</span>::EVERYTHING,
+                visible: <span class="self">self</span>.visible,
             };
 
             f(<span class="kw-2">&amp;mut </span>cx)
@@ -508,7 +511,10 @@
         transform: Affine,
         f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>DrawCx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'b</span>&gt;) -&gt; T,
     ) -&gt; T {
-        <span class="kw">let </span>visible = <span class="self">self</span>.visible.transform(transform.inverse());
+        <span class="kw">let </span>visible = <span class="kw">match </span><span class="self">self</span>.visible.is_infinite() {
+            <span class="bool-val">false </span>=&gt; <span class="self">self</span>.visible.transform(transform.inverse()),
+            <span class="bool-val">true </span>=&gt; <span class="self">self</span>.visible,
+        };
 
         <span class="self">self</span>.canvas.layer(transform, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>, |canvas| {
             <span class="kw">let </span><span class="kw-2">mut </span>cx = DrawCx {

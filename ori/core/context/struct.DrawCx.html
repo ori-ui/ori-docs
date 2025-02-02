@@ -41,22 +41,22 @@
     transform: <a class="struct" href="../../prelude/struct.Affine.html" title="struct ori::prelude::Affine">Affine</a>,
     f: impl <a class="trait" href="https://doc.rust-lang.org/1.84.1/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(&amp;mut <a class="struct" href="../../prelude/struct.DrawCx.html" title="struct ori::prelude::DrawCx">DrawCx</a>&lt;'_, 'b&gt;) -&gt; T,
 ) -&gt; T</h4></section></summary><div class="docblock"><p>Draw a layer with a transform.</p>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.translated" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#244-248">Source</a><h4 class="code-header">pub fn <a href="#method.translated" class="fn">translated</a>&lt;T&gt;(
+</div></details><details class="toggle method-toggle" open><summary><section id="method.translated" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#247-251">Source</a><h4 class="code-header">pub fn <a href="#method.translated" class="fn">translated</a>&lt;T&gt;(
     &amp;mut self,
     translation: <a class="struct" href="../../prelude/struct.Vector.html" title="struct ori::prelude::Vector">Vector</a>,
     f: impl <a class="trait" href="https://doc.rust-lang.org/1.84.1/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(&amp;mut <a class="struct" href="../../prelude/struct.DrawCx.html" title="struct ori::prelude::DrawCx">DrawCx</a>&lt;'_, 'b&gt;) -&gt; T,
 ) -&gt; T</h4></section></summary><div class="docblock"><p>Draw a layer with a translation.</p>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.rotated" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#253">Source</a><h4 class="code-header">pub fn <a href="#method.rotated" class="fn">rotated</a>&lt;T&gt;(
+</div></details><details class="toggle method-toggle" open><summary><section id="method.rotated" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#256">Source</a><h4 class="code-header">pub fn <a href="#method.rotated" class="fn">rotated</a>&lt;T&gt;(
     &amp;mut self,
     angle: <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.f32.html">f32</a>,
     f: impl <a class="trait" href="https://doc.rust-lang.org/1.84.1/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(&amp;mut <a class="struct" href="../../prelude/struct.DrawCx.html" title="struct ori::prelude::DrawCx">DrawCx</a>&lt;'_, 'b&gt;) -&gt; T,
 ) -&gt; T</h4></section></summary><div class="docblock"><p>Draw a layer with a rotation.</p>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.scaled" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#258">Source</a><h4 class="code-header">pub fn <a href="#method.scaled" class="fn">scaled</a>&lt;T&gt;(
+</div></details><details class="toggle method-toggle" open><summary><section id="method.scaled" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#261">Source</a><h4 class="code-header">pub fn <a href="#method.scaled" class="fn">scaled</a>&lt;T&gt;(
     &amp;mut self,
     scale: <a class="struct" href="../../prelude/struct.Vector.html" title="struct ori::prelude::Vector">Vector</a>,
     f: impl <a class="trait" href="https://doc.rust-lang.org/1.84.1/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(&amp;mut <a class="struct" href="../../prelude/struct.DrawCx.html" title="struct ori::prelude::DrawCx">DrawCx</a>&lt;'_, 'b&gt;) -&gt; T,
 ) -&gt; T</h4></section></summary><div class="docblock"><p>Draw a layer with a scale.</p>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.masked" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#263-267">Source</a><h4 class="code-header">pub fn <a href="#method.masked" class="fn">masked</a>&lt;T&gt;(
+</div></details><details class="toggle method-toggle" open><summary><section id="method.masked" class="method"><a class="src rightside" href="../../../src/ori_core/context/draw.rs.html#266-270">Source</a><h4 class="code-header">pub fn <a href="#method.masked" class="fn">masked</a>&lt;T&gt;(
     &amp;mut self,
     mask: impl <a class="trait" href="https://doc.rust-lang.org/1.84.1/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../canvas/struct.Mask.html" title="struct ori::core::canvas::Mask">Mask</a>&gt;,
     f: impl <a class="trait" href="https://doc.rust-lang.org/1.84.1/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(&amp;mut <a class="struct" href="../../prelude/struct.DrawCx.html" title="struct ori::prelude::DrawCx">DrawCx</a>&lt;'_, 'b&gt;) -&gt; T,
