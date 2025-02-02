@@ -76,7 +76,16 @@
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
 <a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, mem};
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, mem};
 
 <span class="doccomment">/// A context for a view.
 </span><span class="attr">#[derive(Debug, Default)]
@@ -90,7 +99,8 @@
         <span class="self">Self</span>::default()
     }
 
-    <span class="kw">fn </span>index_of&lt;T: Any&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    <span class="attr">#[inline(always)]
+    </span><span class="kw">fn </span>index_of&lt;T: Any&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="self">self</span>.contexts
             .iter()
             .enumerate()
@@ -99,21 +109,25 @@
     }
 
     <span class="doccomment">/// Get the number of contexts.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.contexts.len()
     }
 
     <span class="doccomment">/// Check if there are no contexts.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.contexts.is_empty()
     }
 
     <span class="doccomment">/// Check if the context is present.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>contains&lt;T: Any&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.index_of::&lt;T&gt;().is_some()
     }
 
     <span class="doccomment">/// Push a context.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>insert&lt;T: Any&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>context: T) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(index) = <span class="self">self</span>.get_mut::&lt;T&gt;() {
             mem::swap(index, <span class="kw-2">&amp;mut </span>context);
@@ -126,6 +140,7 @@
     </span>}
 
     <span class="doccomment">/// Pop a context.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>remove&lt;T: Any&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">let </span>index = <span class="self">self</span>.index_of::&lt;T&gt;()<span class="question-mark">?</span>;
 
@@ -134,18 +149,21 @@
     }
 
     <span class="doccomment">/// Get a context.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>get&lt;T: Any&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="kw">let </span>index = <span class="self">self</span>.index_of::&lt;T&gt;()<span class="question-mark">?</span>;
         <span class="self">self</span>.contexts[index].downcast_ref::&lt;T&gt;()
     }
 
     <span class="doccomment">/// Get a mutable context.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>get_mut&lt;T: Any&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>T&gt; {
         <span class="kw">let </span>index = <span class="self">self</span>.index_of::&lt;T&gt;()<span class="question-mark">?</span>;
         <span class="self">self</span>.contexts[index].downcast_mut::&lt;T&gt;()
     }
 
     <span class="doccomment">/// Get a context or insert a `default`.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>get_or_default&lt;T: Any + Default&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>T {
         <span class="kw">if </span>!<span class="self">self</span>.contains::&lt;T&gt;() {
             <span class="self">self</span>.insert(T::default());

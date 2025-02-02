@@ -128,7 +128,11 @@
 <a href="#127" id="127">127</a>
 <a href="#128" id="128">128</a>
 <a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::{<span class="self">self</span>, Any},
     future::Future,
 };
@@ -220,11 +224,13 @@
     }
 
     <span class="doccomment">/// Get a context.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>get_context&lt;T: Any&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="self">self</span>.contexts.get::&lt;T&gt;()
     }
 
     <span class="doccomment">/// Get a mutable context.
+    </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub fn </span>get_context_mut&lt;T: Any&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>T&gt; {
         <span class="self">self</span>.contexts.get_mut::&lt;T&gt;()
     }
@@ -234,6 +240,7 @@
     /// # Panics
     /// - If the context is not found.
     </span><span class="attr">#[track_caller]
+    #[inline(always)]
     </span><span class="kw">pub fn </span>context&lt;T: Any&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>T {
         <span class="kw">match </span><span class="self">self</span>.get_context::&lt;T&gt;() {
             <span class="prelude-val">Some</span>(context) =&gt; context,
@@ -246,6 +253,7 @@
     /// # Panics
     /// - If the context is not found.
     </span><span class="attr">#[track_caller]
+    #[inline(always)]
     </span><span class="kw">pub fn </span>context_mut&lt;T: Any&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>T {
         <span class="kw">match </span><span class="self">self</span>.get_context_mut::&lt;T&gt;() {
             <span class="prelude-val">Some</span>(context) =&gt; context,
