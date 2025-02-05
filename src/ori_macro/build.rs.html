@@ -129,9 +129,27 @@
 <a href="#128" id="128">128</a>
 <a href="#129" id="129">129</a>
 <a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a></pre></div><pre class="rust"><code><span class="kw">use </span>proc_macro2::TokenStream;
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a></pre></div><pre class="rust"><code><span class="kw">use </span>proc_macro2::TokenStream;
 <span class="kw">use </span>quote::quote;
 <span class="kw">use </span>syn::{parse::ParseStream, punctuated::Punctuated, DeriveInput};
+
+<span class="kw">use </span><span class="kw">crate</span>::get_option_type;
 
 <span class="macro">syn::custom_keyword!</span>(ignore);
 
@@ -239,7 +257,6 @@
         <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="macro">quote!</span>());
     }
 
-    <span class="kw">let </span>ty = <span class="kw-2">&amp;</span>field.ty;
     <span class="kw">let </span>doc = <span class="macro">format!</span>(<span class="string">"Set `self.{}`."</span>, name);
 
     <span class="kw">let </span><span class="kw-2">mut </span>field_doc = Vec::new();
@@ -250,14 +267,29 @@
         }
     }
 
-    <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> {
-        <span class="attr">#[doc = #doc]
-        #[doc = <span class="string">""</span>]
-        </span>#(#field_doc)*
-        <span class="kw">pub fn </span>#name(<span class="kw-2">mut </span><span class="self">self</span>, #name: <span class="kw">impl </span>Into&lt;#ty&gt;) -&gt; <span class="self">Self </span>{
-            <span class="self">self</span>.#name = ::std::convert::Into::into(#name);
-            <span class="self">self
-        </span>}
-    })
+    <span class="kw">match </span>get_option_type(<span class="kw-2">&amp;</span>field.ty) {
+        <span class="prelude-val">Some</span>(ty) =&gt; <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> {
+            <span class="attr">#[doc = #doc]
+            #[doc = <span class="string">""</span>]
+            </span>#(#field_doc)*
+            <span class="kw">pub fn </span>#name(<span class="kw-2">mut </span><span class="self">self</span>, #name: <span class="kw">impl </span>Into&lt;#ty&gt;) -&gt; <span class="self">Self </span>{
+                <span class="self">self</span>.#name = ::std::option::Option::Some(::std::convert::Into::into(#name));
+                <span class="self">self
+            </span>}
+        }),
+        <span class="prelude-val">None </span>=&gt; {
+            <span class="kw">let </span>ty = <span class="kw-2">&amp;</span>field.ty;
+
+            <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> {
+                <span class="attr">#[doc = #doc]
+                #[doc = <span class="string">""</span>]
+                </span>#(#field_doc)*
+                <span class="kw">pub fn </span>#name(<span class="kw-2">mut </span><span class="self">self</span>, #name: <span class="kw">impl </span>Into&lt;#ty&gt;) -&gt; <span class="self">Self </span>{
+                    <span class="self">self</span>.#name = ::std::convert::Into::into(#name);
+                    <span class="self">self
+                </span>}
+            })
+        }
+    }
 }
 </code></pre></div></section></main></body></html>

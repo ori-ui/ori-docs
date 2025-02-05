@@ -242,6 +242,8 @@
 <span class="kw">mod </span>layout;
 <span class="kw">mod </span>rebuild;
 
+<span class="kw">use </span>std::any::Any;
+
 <span class="kw">pub use </span>base::<span class="kw-2">*</span>;
 <span class="kw">pub use </span>build::<span class="kw-2">*</span>;
 <span class="kw">pub use </span>contexts::<span class="kw-2">*</span>;
@@ -252,7 +254,7 @@
 
 <span class="kw">use crate</span>::{
     event::{Ime, RequestFocus, RequestFocusNext, RequestFocusPrev},
-    style::Styles,
+    style::{Style, Styles, Theme},
     view::{ViewId, ViewState},
     window::{Cursor, Window},
 };
@@ -281,8 +283,18 @@
     }
 
     <span class="doccomment">/// Get the styles.
-    </span><span class="kw">pub fn </span>styles(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Styles {
-        <span class="self">self</span>.context()
+    </span><span class="kw">pub fn </span>styles(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Styles {
+        <span class="self">self</span>.context_mut()
+    }
+
+    <span class="doccomment">/// Get the style `T`.
+    </span><span class="kw">pub fn </span>style&lt;T: Style + Any&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>T {
+        <span class="self">self</span>.styles().style::&lt;T&gt;()
+    }
+
+    <span class="doccomment">/// Get the [`Theme`] of the context.
+    </span><span class="kw">pub fn </span>theme(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Theme {
+        <span class="self">self</span>.style()
     }
 
     <span class="doccomment">/// Get the id of the view.
@@ -364,11 +376,6 @@
     <span class="doccomment">/// Get the property `T` of the view or insert it with a default value.
     </span><span class="kw">pub fn </span>property_or_default&lt;T: <span class="lifetime">'static </span>+ Default&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>T {
         <span class="self">self</span>.view_state.property_or_default()
-    }
-
-    <span class="doccomment">/// Get the class of the view.
-    </span><span class="kw">pub fn </span>class(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
-        <span class="self">self</span>.view_state.class()
     }
 }}
 
@@ -457,13 +464,6 @@
         <span class="kw">let </span>updated = <span class="self">self</span>.is_focusable() != focusable;
         <span class="self">self</span>.view_state.set_focusable(focusable);
         updated
-    }
-
-    <span class="doccomment">/// Set the class of the view.
-    ///
-    /// This should be called before trying to get any style properties.
-    </span><span class="kw">pub fn </span>set_class(<span class="kw-2">&amp;mut </span><span class="self">self</span>, class: <span class="kw">impl </span>Into&lt;String&gt;) {
-        <span class="self">self</span>.view_state.set_class(class.into());
     }
 }}
 </code></pre></div></section></main></body></html>

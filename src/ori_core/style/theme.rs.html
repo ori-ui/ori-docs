@@ -156,22 +156,9 @@
 <a href="#155" id="155">155</a>
 <a href="#156" id="156">156</a>
 <a href="#157" id="157">157</a>
-<a href="#158" id="158">158</a>
-<a href="#159" id="159">159</a>
-<a href="#160" id="160">160</a>
-<a href="#161" id="161">161</a>
-<a href="#162" id="162">162</a>
-<a href="#163" id="163">163</a>
-<a href="#164" id="164">164</a>
-<a href="#165" id="165">165</a>
-<a href="#166" id="166">166</a>
-<a href="#167" id="167">167</a>
-<a href="#168" id="168">168</a>
-<a href="#169" id="169">169</a>
-<a href="#170" id="170">170</a>
-<a href="#171" id="171">171</a></pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::canvas::Color;
+<a href="#158" id="158">158</a></pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::canvas::Color;
 
-<span class="kw">use super</span>::{Style, Styles};
+<span class="kw">use super</span>::{Style, StyleBuilder};
 
 <span class="doccomment">/// A theme.
 </span><span class="attr">#[derive(Clone, Copy, Debug)]
@@ -245,99 +232,86 @@
             info: Color::hex(<span class="string">"#639ff7"</span>),
         }
     }
-}
 
-<span class="kw">impl </span>From&lt;Theme&gt; <span class="kw">for </span>Styles {
-    <span class="kw">fn </span>from(theme: Theme) -&gt; <span class="self">Self </span>{
-        <span class="kw">fn </span>surf(color: Color, is_light: bool, level: i32) -&gt; Color {
-            <span class="kw">let </span>level = level <span class="kw">as </span>f32;
+    <span class="doccomment">/// Get the surface color with a specific level.
+    ///
+    /// Common levels are:
+    /// - `-2`: very low
+    /// - `-1`: low
+    /// - `0`: normal
+    /// - `1`: high
+    /// - `2`: very high
+    </span><span class="kw">pub fn </span>surface(<span class="kw-2">&amp;</span><span class="self">self</span>, level: i8) -&gt; Color {
+        <span class="kw">let </span>level = level <span class="kw">as </span>f32;
 
-            <span class="kw">if </span>is_light {
-                color.darken(level * <span class="number">0.025</span>).saturate(level * <span class="number">0.015</span>)
-            } <span class="kw">else </span>{
-                color.lighten(level * <span class="number">0.04</span>).saturate(level * <span class="number">0.02</span>)
-            }
+        <span class="kw">if </span><span class="self">self</span>.is_light() {
+            <span class="self">self</span>.surface.darken(level * <span class="number">0.025</span>).saturate(level * <span class="number">0.015</span>)
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.surface.lighten(level * <span class="number">0.04</span>).saturate(level * <span class="number">0.02</span>)
         }
-
-        <span class="kw">fn </span>low(color: Color, is_light: bool) -&gt; Color {
-            <span class="kw">if </span>is_light {
-                color.lighten(<span class="number">0.2</span>).desaturate(<span class="number">0.1</span>)
-            } <span class="kw">else </span>{
-                color.darken(<span class="number">0.2</span>).desaturate(<span class="number">0.1</span>)
-            }
-        }
-
-        <span class="kw">fn </span>contrast_low(color: Color, is_light: bool) -&gt; Color {
-            <span class="kw">if </span>is_light {
-                color.lighten(<span class="number">0.2</span>).desaturate(<span class="number">0.1</span>)
-            } <span class="kw">else </span>{
-                color.darken(<span class="number">0.2</span>).desaturate(<span class="number">0.1</span>)
-            }
-        }
-
-        <span class="kw">let </span>is_light = theme.background.luminocity() &gt; <span class="number">0.5</span>;
-
-        Styles::new()
-            .with(Theme::BACKGROUND, theme.background)
-            .with(Theme::SURFACE_LOWER, surf(theme.surface, is_light, -<span class="number">2</span>))
-            .with(Theme::SURFACE_LOW, surf(theme.surface, is_light, -<span class="number">1</span>))
-            .with(Theme::SURFACE, theme.surface)
-            .with(Theme::SURFACE_HIGH, surf(theme.surface, is_light, <span class="number">1</span>))
-            .with(Theme::SURFACE_HIGHER, surf(theme.surface, is_light, <span class="number">2</span>))
-            .with(Theme::SURFACE_HIGHEST, surf(theme.surface, is_light, <span class="number">3</span>))
-            .with(Theme::OUTLINE, theme.outline)
-            .with(Theme::OUTLINE_LOW, low(theme.outline, is_light))
-            .with(Theme::CONTRAST, theme.contrast)
-            .with(Theme::CONTRAST_LOW, contrast_low(theme.contrast, is_light))
-            .with(Theme::PRIMARY, theme.primary)
-            .with(Theme::PRIMARY_LOW, low(theme.primary, is_light))
-            .with(Theme::SECONDARY, theme.secondary)
-            .with(Theme::SECONDARY_LOW, low(theme.secondary, is_light))
-            .with(Theme::ACCENT, theme.accent)
-            .with(Theme::ACCENT_LOW, low(theme.accent, is_light))
-            .with(Theme::DANGER, theme.danger)
-            .with(Theme::DANGER_LOW, low(theme.danger, is_light))
-            .with(Theme::SUCCESS, theme.success)
-            .with(Theme::SUCCESS_LOW, low(theme.success, is_light))
-            .with(Theme::WARNING, theme.warning)
-            .with(Theme::WARNING_LOW, low(theme.warning, is_light))
-            .with(Theme::INFO, theme.info)
-            .with(Theme::INFO_LOW, low(theme.info, is_light))
     }
-}
 
-<span class="kw">impl </span>Default <span class="kw">for </span>Theme {
-    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        Theme::dark()
+    <span class="doccomment">/// Get the low contrast outline color.
+    </span><span class="kw">pub fn </span>outline_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.outline, <span class="self">self</span>.is_light())
     }
+
+    <span class="doccomment">/// Get the low contrast contrast color.
+    </span><span class="kw">pub fn </span>contrast_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.contrast, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast primary color.
+    </span><span class="kw">pub fn </span>primary_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.primary, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast secondary color.
+    </span><span class="kw">pub fn </span>secondary_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.secondary, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast accent color.
+    </span><span class="kw">pub fn </span>accent_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.accent, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast danger color.
+    </span><span class="kw">pub fn </span>danger_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.danger, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast success color.
+    </span><span class="kw">pub fn </span>success_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.success, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast warning color.
+    </span><span class="kw">pub fn </span>warning_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.warning, <span class="self">self</span>.is_light())
+    }
+
+    <span class="doccomment">/// Get the low contrast info color.
+    </span><span class="kw">pub fn </span>info_low(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Color {
+        <span class="self">Self</span>::low(<span class="self">self</span>.info, <span class="self">self</span>.is_light())
+    }
+
+    <span class="kw">fn </span>low(color: Color, is_light: bool) -&gt; Color {
+        <span class="kw">if </span>is_light {
+            color.lighten(<span class="number">0.2</span>).desaturate(<span class="number">0.1</span>)
+        } <span class="kw">else </span>{
+            color.darken(<span class="number">0.2</span>).desaturate(<span class="number">0.1</span>)
+        }
+    }
+
+    <span class="kw">fn </span>is_light(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.background.luminocity() &gt; <span class="number">0.5
+    </span>}
 }
 
-<span class="attr">#[allow(missing_docs)]
-</span><span class="kw">impl </span>Theme {
-    <span class="kw">pub const </span>BACKGROUND: Style&lt;Color&gt; = Style::new(<span class="string">"theme.background"</span>);
-    <span class="kw">pub const </span>SURFACE_LOWER: Style&lt;Color&gt; = Style::new(<span class="string">"theme.surface-lower"</span>);
-    <span class="kw">pub const </span>SURFACE_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.surface-low"</span>);
-    <span class="kw">pub const </span>SURFACE: Style&lt;Color&gt; = Style::new(<span class="string">"theme.surface"</span>);
-    <span class="kw">pub const </span>SURFACE_HIGH: Style&lt;Color&gt; = Style::new(<span class="string">"theme.surface-high"</span>);
-    <span class="kw">pub const </span>SURFACE_HIGHER: Style&lt;Color&gt; = Style::new(<span class="string">"theme.surface-higher"</span>);
-    <span class="kw">pub const </span>SURFACE_HIGHEST: Style&lt;Color&gt; = Style::new(<span class="string">"theme.surface-highest"</span>);
-    <span class="kw">pub const </span>OUTLINE: Style&lt;Color&gt; = Style::new(<span class="string">"theme.outline"</span>);
-    <span class="kw">pub const </span>OUTLINE_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.outline-low"</span>);
-    <span class="kw">pub const </span>CONTRAST: Style&lt;Color&gt; = Style::new(<span class="string">"theme.contrast"</span>);
-    <span class="kw">pub const </span>CONTRAST_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.contrast-low"</span>);
-    <span class="kw">pub const </span>PRIMARY: Style&lt;Color&gt; = Style::new(<span class="string">"theme.primary"</span>);
-    <span class="kw">pub const </span>PRIMARY_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.primary-low"</span>);
-    <span class="kw">pub const </span>SECONDARY: Style&lt;Color&gt; = Style::new(<span class="string">"theme.secondary"</span>);
-    <span class="kw">pub const </span>SECONDARY_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.secondary-low"</span>);
-    <span class="kw">pub const </span>ACCENT: Style&lt;Color&gt; = Style::new(<span class="string">"theme.accent"</span>);
-    <span class="kw">pub const </span>ACCENT_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.accent-low"</span>);
-    <span class="kw">pub const </span>DANGER: Style&lt;Color&gt; = Style::new(<span class="string">"theme.danger"</span>);
-    <span class="kw">pub const </span>DANGER_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.danger-low"</span>);
-    <span class="kw">pub const </span>SUCCESS: Style&lt;Color&gt; = Style::new(<span class="string">"theme.success"</span>);
-    <span class="kw">pub const </span>SUCCESS_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.success-low"</span>);
-    <span class="kw">pub const </span>WARNING: Style&lt;Color&gt; = Style::new(<span class="string">"theme.warning"</span>);
-    <span class="kw">pub const </span>WARNING_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.warning-low"</span>);
-    <span class="kw">pub const </span>INFO: Style&lt;Color&gt; = Style::new(<span class="string">"theme.info"</span>);
-    <span class="kw">pub const </span>INFO_LOW: Style&lt;Color&gt; = Style::new(<span class="string">"theme.info-low"</span>);
+<span class="kw">impl </span>Style <span class="kw">for </span>Theme {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(Theme::dark)
+    }
 }
 </code></pre></div></section></main></body></html>

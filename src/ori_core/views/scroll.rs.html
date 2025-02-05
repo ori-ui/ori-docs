@@ -318,7 +318,50 @@
 <a href="#317" id="317">317</a>
 <a href="#318" id="318">318</a>
 <a href="#319" id="319">319</a>
-<a href="#320" id="320">320</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, is_mobile, Build};
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, is_mobile, Build};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, Color},
@@ -326,7 +369,7 @@
     event::Event,
     layout::{Axis, Rect, Size, Space, Vector},
     rebuild::Rebuild,
-    style::{Stylable, Styled, Theme},
+    style::{Stylable, Style, StyleBuilder, Theme},
     transition::Transition,
     view::{Pod, PodState, View},
 };
@@ -341,9 +384,50 @@
     Scroll::new(Axis::Vertical, view)
 }
 
+<span class="doccomment">/// The style of a scroll view.
+</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">pub struct </span>ScrollStyle {
+    <span class="doccomment">/// The transition of the scrollbar.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>transition: Transition,
+
+    <span class="doccomment">/// The inset of the scrollbar.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>inset: f32,
+
+    <span class="doccomment">/// The width of the scrollbar.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>width: f32,
+
+    <span class="doccomment">/// The radius of the scrollbar.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_radius: BorderRadius,
+
+    <span class="doccomment">/// The color of the scrollbar.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>color: Color,
+
+    <span class="doccomment">/// The color of the scrollbar knob.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>knob_color: Color,
+}
+
+<span class="kw">impl </span>Style <span class="kw">for </span>ScrollStyle {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| ScrollStyle {
+            transition: Transition::ease(<span class="number">0.1</span>),
+            inset: <span class="number">8.0</span>,
+            width: <span class="number">6.0</span>,
+            border_radius: BorderRadius::all(<span class="number">3.0</span>),
+            color: theme.contrast_low(),
+            knob_color: theme.contrast,
+        })
+    }
+}
+
 <span class="doccomment">/// A scrollable view.
 </span><span class="attr">#[example(name = <span class="string">"scroll"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Stylable, Build, Rebuild)]
+#[derive(Build, Rebuild)]
 </span><span class="kw">pub struct </span>Scroll&lt;V&gt; {
     <span class="doccomment">/// The content.
     </span><span class="attr">#[build(ignore)]
@@ -354,33 +438,22 @@
     </span><span class="kw">pub </span>axis: Axis,
 
     <span class="doccomment">/// The transition of the scrollbar.
-    </span><span class="attr">#[style(default = Transition::ease(<span class="number">0.1</span>))]
-    </span><span class="kw">pub </span>transition: Styled&lt;Transition&gt;,
+    </span><span class="kw">pub </span>transition: <span class="prelude-ty">Option</span>&lt;Transition&gt;,
 
     <span class="doccomment">/// The inset of the scrollbar.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = <span class="number">8.0</span>)]
-    </span><span class="kw">pub </span>inset: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>inset: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The width of the scrollbar.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = <span class="number">6.0</span>)]
-    </span><span class="kw">pub </span>width: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>width: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The radius of the scrollbar.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = BorderRadius::all(<span class="number">3.0</span>))]
-    </span><span class="kw">pub </span>border_radius: Styled&lt;BorderRadius&gt;,
+    </span><span class="kw">pub </span>border_radius: <span class="prelude-ty">Option</span>&lt;BorderRadius&gt;,
 
     <span class="doccomment">/// The color of the scrollbar.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default -&gt; Theme::CONTRAST_LOW or Color::grayscale(<span class="number">0.9</span>))]
-    </span><span class="kw">pub </span>color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// The color of the scrollbar knob.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default -&gt; Theme::CONTRAST or Color::grayscale(<span class="number">0.8</span>))]
-    </span><span class="kw">pub </span>knob_color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>knob_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 }
 
 <span class="kw">impl</span>&lt;V&gt; Scroll&lt;V&gt; {
@@ -389,16 +462,16 @@
         <span class="self">Self </span>{
             content: Pod::new(content),
             axis,
-            transition: Styled::style(<span class="string">"scroll.transition"</span>),
-            inset: Styled::style(<span class="string">"scroll.inset"</span>),
-            width: Styled::style(<span class="string">"scroll.width"</span>),
-            border_radius: Styled::style(<span class="string">"scroll.border-radius"</span>),
-            color: Styled::style(<span class="string">"scroll.color"</span>),
-            knob_color: Styled::style(<span class="string">"scroll.knob-color"</span>),
+            transition: <span class="prelude-val">None</span>,
+            inset: <span class="prelude-val">None</span>,
+            width: <span class="prelude-val">None</span>,
+            border_radius: <span class="prelude-val">None</span>,
+            color: <span class="prelude-val">None</span>,
+            knob_color: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="kw">fn </span>scrollbar_rect(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span>ScrollStyle&lt;V&gt;, rect: Rect) -&gt; Rect {
+    <span class="kw">fn </span>scrollbar_rect(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span>ScrollStyle, rect: Rect) -&gt; Rect {
         <span class="kw">let </span>(major, minor) = <span class="self">self</span>.axis.unpack(rect.size());
 
         <span class="kw">let </span>length = major - style.inset * <span class="number">2.0</span>;
@@ -415,7 +488,7 @@
 
     <span class="kw">fn </span>scrollbar_knob_rect(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        style: <span class="kw-2">&amp;</span>ScrollStyle&lt;V&gt;,
+        style: <span class="kw-2">&amp;</span>ScrollStyle,
         rect: Rect,
         overflow: f32,
         scroll: f32,
@@ -442,9 +515,24 @@
     }
 }
 
+<span class="kw">impl</span>&lt;V&gt; Stylable <span class="kw">for </span>Scroll&lt;V&gt; {
+    <span class="kw">type </span>Style = ScrollStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        ScrollStyle {
+            transition: <span class="self">self</span>.transition.unwrap_or(style.transition),
+            inset: <span class="self">self</span>.inset.unwrap_or(style.inset),
+            width: <span class="self">self</span>.width.unwrap_or(style.width),
+            border_radius: <span class="self">self</span>.border_radius.unwrap_or(style.border_radius),
+            color: <span class="self">self</span>.color.unwrap_or(style.color),
+            knob_color: <span class="self">self</span>.knob_color.unwrap_or(style.knob_color),
+        }
+    }
+}
+
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>ScrollState&lt;V&gt; {
-    style: ScrollStyle&lt;V&gt;,
+</span><span class="kw">pub struct </span>ScrollState {
+    style: ScrollStyle,
     dragging: bool,
     scrollbar_hovered: bool,
     scroll: f32,
@@ -452,13 +540,11 @@
 }
 
 <span class="kw">impl</span>&lt;T, V: View&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Scroll&lt;V&gt; {
-    <span class="kw">type </span>State = (ScrollState&lt;V&gt;, PodState&lt;T, V&gt;);
+    <span class="kw">type </span>State = (ScrollState, PodState&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        cx.set_class(<span class="string">"scroll"</span>);
-
         <span class="kw">let </span>state = ScrollState {
-            style: <span class="self">self</span>.style(cx.styles()),
+            style: <span class="self">self</span>.style(cx.style()),
             dragging: <span class="bool-val">false</span>,
             scrollbar_hovered: <span class="bool-val">false</span>,
             scroll: <span class="number">0.0</span>,
@@ -478,7 +564,7 @@
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
         Rebuild::rebuild(<span class="self">self</span>, cx, old);
-        state.style.rebuild(<span class="self">self</span>, cx);
+        <span class="self">self</span>.rebuild_style(cx, <span class="kw-2">&amp;mut </span>state.style);
 
         <span class="self">self</span>.content.rebuild(content, cx, data, <span class="kw-2">&amp;</span>old.content);
     }

@@ -822,14 +822,78 @@
 <a href="#821" id="821">821</a>
 <a href="#822" id="822">822</a>
 <a href="#823" id="823">823</a>
-<a href="#824" id="824">824</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
+<a href="#852" id="852">852</a>
+<a href="#853" id="853">853</a>
+<a href="#854" id="854">854</a>
+<a href="#855" id="855">855</a>
+<a href="#856" id="856">856</a>
+<a href="#857" id="857">857</a>
+<a href="#858" id="858">858</a>
+<a href="#859" id="859">859</a>
+<a href="#860" id="860">860</a>
+<a href="#861" id="861">861</a>
+<a href="#862" id="862">862</a>
+<a href="#863" id="863">863</a>
+<a href="#864" id="864">864</a>
+<a href="#865" id="865">865</a>
+<a href="#866" id="866">866</a>
+<a href="#867" id="867">867</a>
+<a href="#868" id="868">868</a>
+<a href="#869" id="869">869</a>
+<a href="#870" id="870">870</a>
+<a href="#871" id="871">871</a>
+<a href="#872" id="872">872</a>
+<a href="#873" id="873">873</a>
+<a href="#874" id="874">874</a>
+<a href="#875" id="875">875</a>
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a>
+<a href="#879" id="879">879</a>
+<a href="#880" id="880">880</a>
+<a href="#881" id="881">881</a>
+<a href="#882" id="882">882</a>
+<a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::Color,
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::{Capitalize, Event, Ime, Key},
     layout::{Point, Rect, Size, Space},
-    style::{Stylable, Styled, Theme},
+    rebuild::Rebuild,
+    style::{Stylable, Style, StyleBuilder, Theme},
     text::{
         FontAttributes, FontFamily, FontStretch, FontStyle, FontWeight, Paragraph, TextAlign,
         TextLayoutLine, TextWrap,
@@ -843,11 +907,72 @@
     TextInput::new()
 }
 
+<span class="doccomment">/// The style of a [`TextInput`].
+</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">pub struct </span>TextInputStyle {
+    <span class="doccomment">/// The font size of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_size: f32,
+
+    <span class="doccomment">/// The font family of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_family: FontFamily,
+
+    <span class="doccomment">/// The font weight of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_weight: FontWeight,
+
+    <span class="doccomment">/// The font stretch of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_stretch: FontStretch,
+
+    <span class="doccomment">/// The font style of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_style: FontStyle,
+
+    <span class="doccomment">/// The color of the text.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>color: Color,
+
+    <span class="doccomment">/// The color of the placeholder text.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>placeholder_color: Color,
+
+    <span class="doccomment">/// The vertical alignment of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>align: TextAlign,
+
+    <span class="doccomment">/// The line height of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>line_height: f32,
+
+    <span class="doccomment">/// The text wrap of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>wrap: TextWrap,
+}
+
+<span class="kw">impl </span>Style <span class="kw">for </span>TextInputStyle {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| <span class="self">Self </span>{
+            font_size: <span class="number">16.0</span>,
+            font_family: FontFamily::default(),
+            font_weight: FontWeight::NORMAL,
+            font_stretch: FontStretch::Normal,
+            font_style: FontStyle::Normal,
+            color: theme.contrast,
+            placeholder_color: theme.contrast_low(),
+            align: TextAlign::Start,
+            line_height: <span class="number">1.5</span>,
+            wrap: TextWrap::Word,
+        })
+    }
+}
+
 <span class="doccomment">/// A text input.
 ///
 /// Can be styled using the [`TextInputStyle`].
 </span><span class="attr">#[example(name = <span class="string">"text_input"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Stylable, Build)]
+#[derive(Build)]
 </span><span class="kw">pub struct </span>TextInput&lt;T&gt; {
     <span class="doccomment">/// The text.
     </span><span class="attr">#[build(ignore)]
@@ -878,51 +1003,34 @@
     </span><span class="kw">pub </span>capitalize: Capitalize,
 
     <span class="doccomment">/// The font size of the text.
-    </span><span class="attr">#[style(default = <span class="number">16.0</span>)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_size: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>font_size: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The font family of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_family: Styled&lt;FontFamily&gt;,
+    </span><span class="kw">pub </span>font_family: <span class="prelude-ty">Option</span>&lt;FontFamily&gt;,
 
     <span class="doccomment">/// The font weight of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_weight: Styled&lt;FontWeight&gt;,
+    </span><span class="kw">pub </span>font_weight: <span class="prelude-ty">Option</span>&lt;FontWeight&gt;,
 
     <span class="doccomment">/// The font stretch of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_stretch: Styled&lt;FontStretch&gt;,
+    </span><span class="kw">pub </span>font_stretch: <span class="prelude-ty">Option</span>&lt;FontStretch&gt;,
 
     <span class="doccomment">/// The font.into of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_style: Styled&lt;FontStyle&gt;,
+    </span><span class="kw">pub </span>font_style: <span class="prelude-ty">Option</span>&lt;FontStyle&gt;,
 
     <span class="doccomment">/// The color of the text.
-    </span><span class="attr">#[style(default -&gt; Theme::CONTRAST or Color::BLACK)]
-    #[rebuild(draw)]
-    </span><span class="kw">pub </span>color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// The color of the placeholder text.
-    </span><span class="attr">#[style(default -&gt; Theme::CONTRAST_LOW or Color::grayscale(<span class="number">0.9</span>))]
-    #[rebuild(draw)]
-    </span><span class="kw">pub </span>placeholder_color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>placeholder_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// The vertical alignment of the text.
-    </span><span class="attr">#[style(default)]
-    </span><span class="kw">pub </span>align: Styled&lt;TextAlign&gt;,
+    </span><span class="kw">pub </span>align: <span class="prelude-ty">Option</span>&lt;TextAlign&gt;,
 
     <span class="doccomment">/// The line height of the text.
-    </span><span class="attr">#[style(default = <span class="number">1.2</span>)]
-    </span><span class="kw">pub </span>line_height: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>line_height: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The text wrap of the text.
-    </span><span class="attr">#[style(default)]
-    </span><span class="kw">pub </span>wrap: Styled&lt;TextWrap&gt;,
+    </span><span class="kw">pub </span>wrap: <span class="prelude-ty">Option</span>&lt;TextWrap&gt;,
 }
 
 <span class="kw">impl</span>&lt;T&gt; Default <span class="kw">for </span>TextInput&lt;T&gt; {
@@ -941,16 +1049,16 @@
             placeholder: String::from(<span class="string">"..."</span>),
             multiline: <span class="bool-val">false</span>,
             capitalize: Capitalize::Sentences,
-            font_size: Styled::style(<span class="string">"text-input.font-size"</span>),
-            font_family: Styled::style(<span class="string">"text-input.font-family"</span>),
-            font_weight: Styled::style(<span class="string">"text-input.font-weight"</span>),
-            font_stretch: Styled::style(<span class="string">"text-input.font-stretch"</span>),
-            font_style: Styled::style(<span class="string">"text-input.font-style"</span>),
-            color: Styled::style(<span class="string">"text-input.color"</span>),
-            placeholder_color: Styled::style(<span class="string">"text-input.placeholder-color"</span>),
-            align: Styled::style(<span class="string">"text-input.align"</span>),
-            line_height: Styled::style(<span class="string">"text-input.line-height"</span>),
-            wrap: Styled::style(<span class="string">"text-input.wrap"</span>),
+            font_size: <span class="prelude-val">None</span>,
+            font_family: <span class="prelude-val">None</span>,
+            font_weight: <span class="prelude-val">None</span>,
+            font_stretch: <span class="prelude-val">None</span>,
+            font_style: <span class="prelude-val">None</span>,
+            color: <span class="prelude-val">None</span>,
+            placeholder_color: <span class="prelude-val">None</span>,
+            align: <span class="prelude-val">None</span>,
+            line_height: <span class="prelude-val">None</span>,
+            wrap: <span class="prelude-val">None</span>,
         }
     }
 
@@ -982,9 +1090,9 @@
 }
 
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>TextInputState&lt;T&gt; {
+</span><span class="kw">pub struct </span>TextInputState {
     <span class="comment">// the style of the text input
-    </span>style: TextInputStyle&lt;T&gt;,
+    </span>style: TextInputStyle,
 
     <span class="comment">// the current text of the input
     </span>text: String,
@@ -999,7 +1107,7 @@
     selection: <span class="prelude-ty">Option</span>&lt;usize&gt;,
 }
 
-<span class="kw">impl</span>&lt;T&gt; TextInputState&lt;T&gt; {
+<span class="kw">impl </span>TextInputState {
     <span class="kw">fn </span>set_cursor(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cursor: usize, select: bool) {
         <span class="kw">if </span>!select {
             <span class="self">self</span>.selection = <span class="prelude-val">None</span>;
@@ -1173,14 +1281,32 @@
     </span>}
 }
 
+<span class="kw">impl</span>&lt;T&gt; Stylable <span class="kw">for </span>TextInput&lt;T&gt; {
+    <span class="kw">type </span>Style = TextInputStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        TextInputStyle {
+            font_size: <span class="self">self</span>.font_size.unwrap_or(style.font_size),
+            font_family: (<span class="self">self</span>.font_family.clone()).unwrap_or_else(|| style.font_family.clone()),
+            font_weight: <span class="self">self</span>.font_weight.unwrap_or(style.font_weight),
+            font_stretch: <span class="self">self</span>.font_stretch.unwrap_or(style.font_stretch),
+            font_style: <span class="self">self</span>.font_style.unwrap_or(style.font_style),
+            color: <span class="self">self</span>.color.unwrap_or(style.color),
+            placeholder_color: <span class="self">self</span>.placeholder_color.unwrap_or(style.placeholder_color),
+            align: <span class="self">self</span>.align.unwrap_or(style.align),
+            line_height: <span class="self">self</span>.line_height.unwrap_or(style.line_height),
+            wrap: <span class="self">self</span>.wrap.unwrap_or(style.wrap),
+        }
+    }
+}
+
 <span class="kw">impl</span>&lt;T&gt; View&lt;T&gt; <span class="kw">for </span>TextInput&lt;T&gt; {
-    <span class="kw">type </span>State = TextInputState&lt;T&gt;;
+    <span class="kw">type </span>State = TextInputState;
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, _data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        cx.set_class(<span class="string">"text-input"</span>);
         cx.set_focusable(<span class="bool-val">true</span>);
 
-        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.styles());
+        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.style());
 
         <span class="kw">let </span><span class="kw-2">mut </span>paragraph = Paragraph::new(style.line_height, style.align, style.wrap);
 
@@ -1214,7 +1340,7 @@
     }
 
     <span class="kw">fn </span>rebuild(<span class="kw-2">&amp;mut </span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State, cx: <span class="kw-2">&amp;mut </span>RebuildCx, _data: <span class="kw-2">&amp;mut </span>T, _old: <span class="kw-2">&amp;</span><span class="self">Self</span>) {
-        state.style.rebuild(<span class="self">self</span>, cx);
+        <span class="self">self</span>.rebuild_style(cx, <span class="kw-2">&amp;mut </span>state.style);
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(text) = <span class="kw-2">&amp;</span><span class="self">self</span>.text {
             <span class="kw">if </span>state.cursor &gt;= state.text.len() {
@@ -1567,8 +1693,8 @@
             cx.paragraph(<span class="kw-2">&amp;</span>placeholder, cx.rect());
         }
 
-        <span class="kw">let </span>contrast = cx.styles().get_or(Color::BLACK, <span class="kw-2">&amp;</span>Theme::CONTRAST);
-        <span class="kw">let </span>info = cx.styles().get_or(Color::BLUE, <span class="kw-2">&amp;</span>Theme::INFO);
+        <span class="kw">let </span>contrast = cx.theme().contrast;
+        <span class="kw">let </span>info = cx.theme().info;
 
         <span class="comment">// draw the cursor
         </span><span class="kw">if </span>cx.is_focused() {
@@ -1583,7 +1709,7 @@
     }
 }
 
-<span class="kw">fn </span>draw_highlight&lt;T&gt;(state: <span class="kw-2">&amp;mut </span>TextInputState&lt;T&gt;, cx: <span class="kw-2">&amp;mut </span>DrawCx, color: Color) {
+<span class="kw">fn </span>draw_highlight(state: <span class="kw-2">&amp;mut </span>TextInputState, cx: <span class="kw-2">&amp;mut </span>DrawCx, color: Color) {
     <span class="kw">if let </span><span class="prelude-val">Some</span>(selection) = state.selection {
         <span class="kw">let </span>start = usize::min(state.cursor, selection);
         <span class="kw">let </span>end = usize::max(state.cursor, selection);
@@ -1626,7 +1752,7 @@
     }
 }
 
-<span class="kw">fn </span>draw_cursor&lt;T&gt;(state: <span class="kw-2">&amp;mut </span>TextInputState&lt;T&gt;, cx: <span class="kw-2">&amp;mut </span>DrawCx, color: Color) {
+<span class="kw">fn </span>draw_cursor(state: <span class="kw-2">&amp;mut </span>TextInputState, cx: <span class="kw-2">&amp;mut </span>DrawCx, color: Color) {
     <span class="kw">if </span>state.lines.is_empty() {
         <span class="comment">// if there are no lines, just draw the cursor at the start
 

@@ -219,7 +219,54 @@
 <a href="#218" id="218">218</a>
 <a href="#219" id="219">219</a>
 <a href="#220" id="220">220</a>
-<a href="#221" id="221">221</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, BorderWidth, Color},
@@ -227,7 +274,7 @@
     event::Event,
     layout::{Padding, Size, Space, Vector},
     rebuild::Rebuild,
-    style::{Stylable, Styled, Theme},
+    style::{Stylable, Style, StyleBuilder, Theme},
     transition::Transition,
     view::{Pod, PodState, View},
 };
@@ -237,50 +284,82 @@
     Button::new(view)
 }
 
+<span class="doccomment">/// The style of a button.
+</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">pub struct </span>ButtonStyle {
+    <span class="doccomment">/// The padding.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>padding: Padding,
+
+    <span class="doccomment">/// The distance of the fancy effect.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>fancy: f32,
+
+    <span class="doccomment">/// The transition of the button.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>transition: Transition,
+
+    <span class="doccomment">/// The color of the button.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>color: Color,
+
+    <span class="doccomment">/// The border radius.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_radius: BorderRadius,
+
+    <span class="doccomment">/// The border width.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_width: BorderWidth,
+
+    <span class="doccomment">/// The border color.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_color: Color,
+}
+
+<span class="kw">impl </span>Style <span class="kw">for </span>ButtonStyle {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| ButtonStyle {
+            padding: Padding::all(<span class="number">8.0</span>),
+            fancy: <span class="number">0.0</span>,
+            transition: Transition::ease(<span class="number">0.1</span>),
+            color: theme.surface(<span class="number">2</span>),
+            border_radius: BorderRadius::all(<span class="number">4.0</span>),
+            border_width: BorderWidth::all(<span class="number">0.0</span>),
+            border_color: theme.outline,
+        })
+    }
+}
+
 <span class="doccomment">/// A button.
 ///
 /// Can be styled using the [`ButtonStyle`].
 </span><span class="attr">#[example(name = <span class="string">"button"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Stylable, Build, Rebuild)]
+#[derive(Build)]
 </span><span class="kw">pub struct </span>Button&lt;V&gt; {
     <span class="doccomment">/// The content.
     </span><span class="attr">#[build(ignore)]
     </span><span class="kw">pub </span>content: Pod&lt;V&gt;,
 
     <span class="doccomment">/// The padding.
-    </span><span class="attr">#[rebuild(layout)]
-    #[style(default = Padding::all(<span class="number">8.0</span>))]
-    </span><span class="kw">pub </span>padding: Styled&lt;Padding&gt;,
+    </span><span class="kw">pub </span>padding: <span class="prelude-ty">Option</span>&lt;Padding&gt;,
 
     <span class="doccomment">/// The distance of the fancy effect.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = <span class="number">0.0</span>)]
-    </span><span class="kw">pub </span>fancy: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>fancy: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The transition of the button.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = Transition::ease(<span class="number">0.1</span>))]
-    </span><span class="kw">pub </span>transition: Styled&lt;Transition&gt;,
+    </span><span class="kw">pub </span>transition: <span class="prelude-ty">Option</span>&lt;Transition&gt;,
 
     <span class="doccomment">/// The color of the button.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default -&gt; Theme::SURFACE_HIGHER or Color::WHITE)]
-    </span><span class="kw">pub </span>color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// The border radius.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = BorderRadius::all(<span class="number">4.0</span>))]
-    </span><span class="kw">pub </span>border_radius: Styled&lt;BorderRadius&gt;,
+    </span><span class="kw">pub </span>border_radius: <span class="prelude-ty">Option</span>&lt;BorderRadius&gt;,
 
     <span class="doccomment">/// The border width.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default)]
-    </span><span class="kw">pub </span>border_width: Styled&lt;BorderWidth&gt;,
+    </span><span class="kw">pub </span>border_width: <span class="prelude-ty">Option</span>&lt;BorderWidth&gt;,
 
     <span class="doccomment">/// The border color.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default -&gt; Theme::OUTLINE or Color::BLACK)]
-    </span><span class="kw">pub </span>border_color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>border_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 }
 
 <span class="kw">impl</span>&lt;V&gt; Button&lt;V&gt; {
@@ -288,35 +367,50 @@
     </span><span class="kw">pub fn </span>new(content: V) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             content: Pod::new(content),
-            padding: Styled::style(<span class="string">"button.padding"</span>),
-            fancy: Styled::style(<span class="string">"button.fancy"</span>),
-            transition: Styled::style(<span class="string">"button.transition"</span>),
-            color: Styled::style(<span class="string">"button.color"</span>),
-            border_radius: Styled::style(<span class="string">"button.border-radius"</span>),
-            border_width: Styled::style(<span class="string">"button.border-width"</span>),
-            border_color: Styled::style(<span class="string">"button.border-color"</span>),
+            padding: <span class="prelude-val">None</span>,
+            fancy: <span class="prelude-val">None</span>,
+            transition: <span class="prelude-val">None</span>,
+            color: <span class="prelude-val">None</span>,
+            border_radius: <span class="prelude-val">None</span>,
+            border_width: <span class="prelude-val">None</span>,
+            border_color: <span class="prelude-val">None</span>,
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;V&gt; Stylable <span class="kw">for </span>Button&lt;V&gt; {
+    <span class="kw">type </span>Style = ButtonStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        ButtonStyle {
+            padding: <span class="self">self</span>.padding.unwrap_or(style.padding),
+            fancy: <span class="self">self</span>.fancy.unwrap_or(style.fancy),
+            transition: <span class="self">self</span>.transition.unwrap_or(style.transition),
+            color: <span class="self">self</span>.color.unwrap_or(style.color),
+            border_radius: <span class="self">self</span>.border_radius.unwrap_or(style.border_radius),
+            border_width: <span class="self">self</span>.border_width.unwrap_or(style.border_width),
+            border_color: <span class="self">self</span>.border_color.unwrap_or(style.border_color),
         }
     }
 }
 
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>ButtonState&lt;V&gt; {
+</span><span class="kw">pub struct </span>ButtonState {
     <span class="kw">pub </span>hovered: f32,
     <span class="kw">pub </span>active: f32,
-    <span class="kw">pub </span>style: ButtonStyle&lt;V&gt;,
+    <span class="kw">pub </span>style: ButtonStyle,
 }
 
 <span class="kw">impl</span>&lt;T, V: View&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Button&lt;V&gt; {
-    <span class="kw">type </span>State = (ButtonState&lt;V&gt;, PodState&lt;T, V&gt;);
+    <span class="kw">type </span>State = (ButtonState, PodState&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        cx.set_class(<span class="string">"button"</span>);
         cx.set_focusable(<span class="bool-val">true</span>);
 
         <span class="kw">let </span>state = ButtonState {
             hovered: <span class="number">0.0</span>,
             active: <span class="number">0.0</span>,
-            style: <span class="self">self</span>.style(cx.styles()),
+            style: <span class="self">self</span>.style(cx.style()),
         };
 
         (state, <span class="self">self</span>.content.build(cx, data))
@@ -329,9 +423,7 @@
         data: <span class="kw-2">&amp;mut </span>T,
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
-        Rebuild::rebuild(<span class="self">self</span>, cx, old);
-        state.style.rebuild(<span class="self">self</span>, cx);
-
+        <span class="self">self</span>.rebuild_style(cx, <span class="kw-2">&amp;mut </span>state.style);
         <span class="self">self</span>.content.rebuild(content, cx, data, <span class="kw-2">&amp;</span>old.content);
     }
 
@@ -392,12 +484,14 @@
             <span class="kw">let </span>face = state.style.color.mix(bright, hovered).mix(dim, active);
 
             <span class="kw">if </span>cx.is_focused() {
+                <span class="kw">let </span>info = cx.theme().info;
+
                 cx.quad(
                     cx.rect().expand(<span class="number">2.0</span>),
                     Color::TRANSPARENT,
                     state.style.border_radius.expand(<span class="number">2.0</span>),
                     BorderWidth::all(<span class="number">2.0</span>),
-                    cx.styles().get_or(Color::BLUE, <span class="kw-2">&amp;</span>Theme::INFO),
+                    info,
                 );
             }
 

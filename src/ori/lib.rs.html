@@ -117,7 +117,7 @@
 <span class="kw">pub mod </span>prelude {
     <span class="doccomment">//! Convenient imports for Ori.
 
-    </span><span class="kw">pub use </span>ori_app::{include_style, App, AppBuilder, AppCommand, AppDelegate, DelegateCx};
+    </span><span class="kw">pub use </span>ori_app::{App, AppBuilder, AppCommand, AppDelegate, DelegateCx};
 
     <span class="kw">pub use </span>ori_core::{
         canvas::{
@@ -140,14 +140,14 @@
         log::{debug, error, info, trace, warn},
         rebuild::Rebuild,
         style,
-        style::{comp, style, val, Stylable, Style, Styled, Styles, Theme},
+        style::{Stylable, Style, StyleBuilder, Styles, Theme},
         text::{
             include_font, FontAttributes, FontFamily, FontSource, FontStretch, FontStyle,
             FontWeight, Fonts, Paragraph, TextAlign, TextWrap,
         },
         transition::{ease, linear, Easing, Transition},
         view::{
-            any, pod, AnyView, BoxedView, Pod, PodSeq, SeqState, PodState, View, ViewSeq, ViewState,
+            any, pod, AnyView, BoxedView, Pod, PodSeq, PodState, SeqState, View, ViewSeq, ViewState,
         },
         views::<span class="kw-2">*</span>,
         window::{Cursor, Pointer, Window, WindowId, WindowSizing},

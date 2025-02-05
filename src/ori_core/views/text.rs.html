@@ -182,7 +182,63 @@
 <a href="#181" id="181">181</a>
 <a href="#182" id="182">182</a>
 <a href="#183" id="183">183</a>
-<a href="#184" id="184">184</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Write};
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Write};
 
 <span class="kw">use </span>ori_macro::{example, Build};
 <span class="kw">use </span>smol_str::SmolStr;
@@ -193,7 +249,7 @@
     event::Event,
     layout::{Size, Space},
     rebuild::Rebuild,
-    style::{Stylable, Styled, Theme},
+    style::{Stylable, Style, StyleBuilder, Theme},
     text::{
         FontAttributes, FontFamily, FontStretch, FontStyle, FontWeight, Paragraph, TextAlign,
         TextWrap,
@@ -220,60 +276,98 @@
     Text::new(text)
 }
 
+<span class="doccomment">/// The style of a [`Text`].
+</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">pub struct </span>TextStyle {
+    <span class="doccomment">/// The font size of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_size: f32,
+
+    <span class="doccomment">/// The font family of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_family: FontFamily,
+
+    <span class="doccomment">/// The font weight of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_weight: FontWeight,
+
+    <span class="doccomment">/// The font stretch of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_stretch: FontStretch,
+
+    <span class="doccomment">/// The font style of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>font_style: FontStyle,
+
+    <span class="doccomment">/// The color of the text.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>color: Color,
+
+    <span class="doccomment">/// The horizontal alignment of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>align: TextAlign,
+
+    <span class="doccomment">/// The line height of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>line_height: f32,
+
+    <span class="doccomment">/// The text wrap of the text.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>wrap: TextWrap,
+}
+
+<span class="kw">impl </span>Style <span class="kw">for </span>TextStyle {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| <span class="self">Self </span>{
+            font_size: <span class="number">16.0</span>,
+            font_family: FontFamily::default(),
+            font_weight: FontWeight::NORMAL,
+            font_stretch: FontStretch::Normal,
+            font_style: FontStyle::Normal,
+            color: theme.contrast,
+            align: TextAlign::Left,
+            line_height: <span class="number">1.2</span>,
+            wrap: TextWrap::None,
+        })
+    }
+}
+
 <span class="doccomment">/// A view that displays text.
 ///
 /// Can be styled using the [`TextStyle`].
 </span><span class="attr">#[example(name = <span class="string">"text"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Stylable, Build, Rebuild)]
+#[derive(Build, Rebuild)]
 </span><span class="kw">pub struct </span>Text {
     <span class="doccomment">/// The text.
     </span><span class="attr">#[rebuild(layout)]
     </span><span class="kw">pub </span>text: SmolStr,
 
     <span class="doccomment">/// The font size of the text.
-    </span><span class="attr">#[style(default = <span class="number">16.0</span>)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_size: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>font_size: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The font family of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_family: Styled&lt;FontFamily&gt;,
+    </span><span class="kw">pub </span>font_family: <span class="prelude-ty">Option</span>&lt;FontFamily&gt;,
 
     <span class="doccomment">/// The font weight of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_weight: Styled&lt;FontWeight&gt;,
+    </span><span class="kw">pub </span>font_weight: <span class="prelude-ty">Option</span>&lt;FontWeight&gt;,
 
     <span class="doccomment">/// The font stretch of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_stretch: Styled&lt;FontStretch&gt;,
+    </span><span class="kw">pub </span>font_stretch: <span class="prelude-ty">Option</span>&lt;FontStretch&gt;,
 
     <span class="doccomment">/// The font.into of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>font_style: Styled&lt;FontStyle&gt;,
+    </span><span class="kw">pub </span>font_style: <span class="prelude-ty">Option</span>&lt;FontStyle&gt;,
 
     <span class="doccomment">/// The color of the text.
-    </span><span class="attr">#[style(default -&gt; Theme::CONTRAST or Color::BLACK)]
-    #[rebuild(draw)]
-    </span><span class="kw">pub </span>color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// The horizontal alignment of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>align: Styled&lt;TextAlign&gt;,
+    </span><span class="kw">pub </span>align: <span class="prelude-ty">Option</span>&lt;TextAlign&gt;,
 
     <span class="doccomment">/// The line height of the text.
-    </span><span class="attr">#[style(default = <span class="number">1.2</span>)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>line_height: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>line_height: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 
     <span class="doccomment">/// The text wrap of the text.
-    </span><span class="attr">#[style(default)]
-    #[rebuild(layout)]
-    </span><span class="kw">pub </span>wrap: Styled&lt;TextWrap&gt;,
+    </span><span class="kw">pub </span>wrap: <span class="prelude-ty">Option</span>&lt;TextWrap&gt;,
 }
 
 <span class="kw">impl </span>Text {
@@ -281,15 +375,15 @@
     </span><span class="kw">pub fn </span>new(text: <span class="kw">impl </span>Into&lt;SmolStr&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             text: text.into(),
-            font_size: Styled::style(<span class="string">"text.font-size"</span>),
-            font_family: Styled::style(<span class="string">"text.font-family"</span>),
-            font_weight: Styled::style(<span class="string">"text.font-weight"</span>),
-            font_stretch: Styled::style(<span class="string">"text.font-stretch"</span>),
-            font_style: Styled::style(<span class="string">"text.font-style"</span>),
-            color: Styled::style(<span class="string">"text.color"</span>),
-            align: Styled::style(<span class="string">"text.align"</span>),
-            line_height: Styled::style(<span class="string">"text.line-height"</span>),
-            wrap: Styled::style(<span class="string">"text.wrap"</span>),
+            font_size: <span class="prelude-val">None</span>,
+            font_family: <span class="prelude-val">None</span>,
+            font_weight: <span class="prelude-val">None</span>,
+            font_stretch: <span class="prelude-val">None</span>,
+            font_style: <span class="prelude-val">None</span>,
+            color: <span class="prelude-val">None</span>,
+            align: <span class="prelude-val">None</span>,
+            line_height: <span class="prelude-val">None</span>,
+            wrap: <span class="prelude-val">None</span>,
         }
     }
 
@@ -306,11 +400,29 @@
     }
 }
 
+<span class="kw">impl </span>Stylable <span class="kw">for </span>Text {
+    <span class="kw">type </span>Style = TextStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        <span class="self">Self</span>::Style {
+            font_size: <span class="self">self</span>.font_size.unwrap_or(style.font_size),
+            font_family: (<span class="self">self</span>.font_family.clone()).unwrap_or_else(|| style.font_family.clone()),
+            font_weight: <span class="self">self</span>.font_weight.unwrap_or(style.font_weight),
+            font_stretch: <span class="self">self</span>.font_stretch.unwrap_or(style.font_stretch),
+            font_style: <span class="self">self</span>.font_style.unwrap_or(style.font_style),
+            color: <span class="self">self</span>.color.unwrap_or(style.color),
+            align: <span class="self">self</span>.align.unwrap_or(style.align),
+            line_height: <span class="self">self</span>.line_height.unwrap_or(style.line_height),
+            wrap: <span class="self">self</span>.wrap.unwrap_or(style.wrap),
+        }
+    }
+}
+
 <span class="kw">impl</span>&lt;T&gt; View&lt;T&gt; <span class="kw">for </span>Text {
     <span class="kw">type </span>State = (TextStyle, Paragraph);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, _data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.styles());
+        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.style());
 
         <span class="kw">let </span><span class="kw-2">mut </span>paragraph = Paragraph::new(style.line_height, style.align, style.wrap);
         paragraph.push_text(<span class="kw-2">&amp;</span><span class="self">self</span>.text, <span class="self">self</span>.font_attributes(<span class="kw-2">&amp;</span>style));
@@ -325,7 +437,7 @@
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
         Rebuild::rebuild(<span class="self">self</span>, cx, old);
-        style.rebuild(<span class="self">self</span>, cx);
+        <span class="self">self</span>.rebuild_style(cx, style);
 
         paragraph.line_height = style.line_height;
         paragraph.align = style.align;

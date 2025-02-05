@@ -154,15 +154,42 @@
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
 <a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::{BorderRadius, BorderWidth, Color, Curve, FillRule, Mask},
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
-    layout::{Padding, Size, Space},
+    layout::{Size, Space},
     rebuild::Rebuild,
-    style::{Stylable, Styled, Theme},
+    style::{Stylable, Style, StyleBuilder, Theme},
     view::{Pod, PodState, View},
 };
 
@@ -180,47 +207,68 @@
 ///     background(Color::RED, text("Hello, World!"))
 /// }
 /// ````
-</span><span class="kw">pub fn </span>background&lt;V&gt;(background: <span class="kw">impl </span>Into&lt;Styled&lt;Color&gt;&gt;, view: V) -&gt; Container&lt;V&gt; {
+</span><span class="kw">pub fn </span>background&lt;V&gt;(background: <span class="kw">impl </span>Into&lt;Color&gt;, view: V) -&gt; Container&lt;V&gt; {
     Container::new(view).background(background)
+}
+
+<span class="doccomment">/// The style of a container.
+</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">pub struct </span>ContainerStyle {
+    <span class="doccomment">/// The background color.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>background: Color,
+
+    <span class="doccomment">/// The border radius.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_radius: BorderRadius,
+
+    <span class="doccomment">/// The border width.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_width: BorderWidth,
+
+    <span class="doccomment">/// The border color.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>border_color: Color,
+
+    <span class="doccomment">/// Whether to mask the content.
+    </span><span class="attr">#[rebuild(draw)]
+    </span><span class="kw">pub </span>mask: bool,
+}
+
+<span class="kw">impl </span>Style <span class="kw">for </span>ContainerStyle {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| ContainerStyle {
+            background: theme.surface(<span class="number">0</span>),
+            border_radius: BorderRadius::all(<span class="number">4.0</span>),
+            border_width: BorderWidth::all(<span class="number">0.0</span>),
+            border_color: theme.outline,
+            mask: <span class="bool-val">false</span>,
+        })
+    }
 }
 
 <span class="doccomment">/// A container view.
 </span><span class="attr">#[example(name = <span class="string">"container"</span>, width = <span class="number">400</span>, height = <span class="number">300</span>)]
-#[derive(Stylable, Build, Rebuild)]
+#[derive(Build, Rebuild)]
 </span><span class="kw">pub struct </span>Container&lt;V&gt; {
     <span class="doccomment">/// The content.
     </span><span class="attr">#[build(ignore)]
     </span><span class="kw">pub </span>content: Pod&lt;V&gt;,
 
     <span class="doccomment">/// The background color.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default -&gt; Theme::SURFACE or Color::WHITE)]
-    </span><span class="kw">pub </span>background: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>background: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// The border radius.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default)]
-    </span><span class="kw">pub </span>border_radius: Styled&lt;BorderRadius&gt;,
+    </span><span class="kw">pub </span>border_radius: <span class="prelude-ty">Option</span>&lt;BorderRadius&gt;,
 
     <span class="doccomment">/// The border width.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default)]
-    </span><span class="kw">pub </span>border_width: Styled&lt;BorderWidth&gt;,
+    </span><span class="kw">pub </span>border_width: <span class="prelude-ty">Option</span>&lt;BorderWidth&gt;,
 
     <span class="doccomment">/// The border color.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default -&gt; Theme::OUTLINE or Color::BLACK)]
-    </span><span class="kw">pub </span>border_color: Styled&lt;Color&gt;,
+    </span><span class="kw">pub </span>border_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
 
     <span class="doccomment">/// Whether to mask the content.
-    </span><span class="attr">#[rebuild(draw)]
-    #[style(default = <span class="bool-val">false</span>)]
-    </span><span class="kw">pub </span>mask: Styled&lt;bool&gt;,
-
-    <span class="doccomment">/// The padding.
-    </span><span class="attr">#[rebuild(layout)]
-    #[style(default)]
-    </span><span class="kw">pub </span>padding: Styled&lt;Padding&gt;,
+    </span><span class="kw">pub </span>mask: <span class="prelude-ty">Option</span>&lt;bool&gt;,
 }
 
 <span class="kw">impl</span>&lt;V&gt; Container&lt;V&gt; {
@@ -228,23 +276,34 @@
     </span><span class="kw">pub fn </span>new(content: V) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             content: Pod::new(content),
-            background: Styled::style(<span class="string">"container.background"</span>),
-            border_radius: Styled::style(<span class="string">"container.border-radius"</span>),
-            border_width: Styled::style(<span class="string">"container.border-width"</span>),
-            border_color: Styled::style(<span class="string">"container.border-color"</span>),
-            mask: Styled::style(<span class="string">"container.mask"</span>),
-            padding: Styled::style(<span class="string">"container.padding"</span>),
+            background: <span class="prelude-val">None</span>,
+            border_radius: <span class="prelude-val">None</span>,
+            border_width: <span class="prelude-val">None</span>,
+            border_color: <span class="prelude-val">None</span>,
+            mask: <span class="prelude-val">None</span>,
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;V&gt; Stylable <span class="kw">for </span>Container&lt;V&gt; {
+    <span class="kw">type </span>Style = ContainerStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        ContainerStyle {
+            background: <span class="self">self</span>.background.unwrap_or(style.background),
+            border_radius: <span class="self">self</span>.border_radius.unwrap_or(style.border_radius),
+            border_width: <span class="self">self</span>.border_width.unwrap_or(style.border_width),
+            border_color: <span class="self">self</span>.border_color.unwrap_or(style.border_color),
+            mask: <span class="self">self</span>.mask.unwrap_or(style.mask),
         }
     }
 }
 
 <span class="kw">impl</span>&lt;T, V: View&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Container&lt;V&gt; {
-    <span class="kw">type </span>State = (ContainerStyle&lt;V&gt;, PodState&lt;T, V&gt;);
+    <span class="kw">type </span>State = (ContainerStyle, PodState&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        cx.set_class(<span class="string">"container"</span>);
-
-        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.styles());
+        <span class="kw">let </span>style = <span class="self">self</span>.style(cx.style());
         (style, <span class="self">self</span>.content.build(cx, data))
     }
 
@@ -256,7 +315,7 @@
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
         Rebuild::rebuild(<span class="self">self</span>, cx, old);
-        style.rebuild(<span class="self">self</span>, cx);
+        <span class="self">self</span>.rebuild_style(cx, style);
 
         <span class="self">self</span>.content.rebuild(state, cx, data, <span class="kw-2">&amp;</span>old.content);
     }
@@ -273,17 +332,12 @@
 
     <span class="kw">fn </span>layout(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        (style, state): <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
+        (<span class="kw">_</span>, state): <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
         cx: <span class="kw-2">&amp;mut </span>LayoutCx,
         data: <span class="kw-2">&amp;mut </span>T,
         space: Space,
     ) -&gt; Size {
-        <span class="kw">let </span>content_space = space.shrink(style.padding.size());
-        <span class="kw">let </span>content_size = <span class="self">self</span>.content.layout(state, cx, data, content_space);
-
-        state.translate(style.padding.offset());
-
-        space.fit(content_size + style.padding.size())
+        <span class="self">self</span>.content.layout(state, cx, data, space)
     }
 
     <span class="kw">fn </span>draw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, (style, state): <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State, cx: <span class="kw-2">&amp;mut </span>DrawCx, data: <span class="kw-2">&amp;mut </span>T) {

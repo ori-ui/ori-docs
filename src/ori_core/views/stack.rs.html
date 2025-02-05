@@ -400,7 +400,40 @@
 <a href="#399" id="399">399</a>
 <a href="#400" id="400">400</a>
 <a href="#401" id="401">401</a>
-<a href="#402" id="402">402</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::Deref;
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::ops::Deref;
 
 <span class="kw">use </span>ori_macro::{example, Build};
 
@@ -409,7 +442,7 @@
     event::Event,
     layout::{Align, Axis, Justify, Size, Space},
     rebuild::Rebuild,
-    style::{Stylable, Styled, Styles},
+    style::{Stylable, Style, StyleBuilder},
     view::{AnyView, PodSeq, SeqState, View, ViewSeq},
 };
 
@@ -463,9 +496,35 @@
     Stack::any_vertical()
 }
 
+<span class="doccomment">/// A style for a [`Stack`].
+</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">pub struct </span>StackStyle {
+    <span class="doccomment">/// How to justify the content along the main axis.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>justify: Justify,
+
+    <span class="doccomment">/// How to align the content along the cross axis, within each line.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>align: Align,
+
+    <span class="doccomment">/// The gap between children.
+    </span><span class="attr">#[rebuild(layout)]
+    </span><span class="kw">pub </span>gap: f32,
+}
+
+<span class="kw">impl </span>Style <span class="kw">for </span>StackStyle {
+    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|| <span class="self">Self </span>{
+            justify: Justify::Start,
+            align: Align::Center,
+            gap: <span class="number">0.0</span>,
+        })
+    }
+}
+
 <span class="doccomment">/// A view that stacks it's content in a line.
 </span><span class="attr">#[example(name = <span class="string">"stack"</span>, width = <span class="number">400</span>, height = <span class="number">600</span>)]
-#[derive(Stylable, Build, Rebuild)]
+#[derive(Build, Rebuild)]
 </span><span class="kw">pub struct </span>Stack&lt;V&gt; {
     <span class="doccomment">/// The content of the stack.
     </span><span class="attr">#[build(ignore)]
@@ -478,17 +537,17 @@
     <span class="doccomment">/// How to justify the content along the main axis.
     </span><span class="attr">#[rebuild(layout)]
     #[style(default)]
-    </span><span class="kw">pub </span>justify: Styled&lt;Justify&gt;,
+    </span><span class="kw">pub </span>justify: <span class="prelude-ty">Option</span>&lt;Justify&gt;,
 
     <span class="doccomment">/// How to align the content along the cross axis, within each line.
     </span><span class="attr">#[rebuild(layout)]
     #[style(default = Align::Center)]
-    </span><span class="kw">pub </span>align: Styled&lt;Align&gt;,
+    </span><span class="kw">pub </span>align: <span class="prelude-ty">Option</span>&lt;Align&gt;,
 
     <span class="doccomment">/// The gap between children.
     </span><span class="attr">#[rebuild(layout)]
     #[style(default)]
-    </span><span class="kw">pub </span>gap: Styled&lt;f32&gt;,
+    </span><span class="kw">pub </span>gap: <span class="prelude-ty">Option</span>&lt;f32&gt;,
 }
 
 <span class="kw">impl</span>&lt;V&gt; Stack&lt;V&gt; {
@@ -497,9 +556,9 @@
         <span class="self">Self </span>{
             content: PodSeq::new(content),
             axis,
-            justify: Styled::style(<span class="string">"stack.justify"</span>),
-            align: Styled::style(<span class="string">"stack.align"</span>),
-            gap: Styled::style(<span class="string">"stack.gap"</span>),
+            justify: <span class="prelude-val">None</span>,
+            align: <span class="prelude-val">None</span>,
+            gap: <span class="prelude-val">None</span>,
         }
     }
 
@@ -569,21 +628,30 @@
     }
 }
 
+<span class="kw">impl</span>&lt;V&gt; Stylable <span class="kw">for </span>Stack&lt;V&gt; {
+    <span class="kw">type </span>Style = StackStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, style: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        StackStyle {
+            justify: <span class="self">self</span>.justify.unwrap_or(style.justify),
+            align: <span class="self">self</span>.align.unwrap_or(style.align),
+            gap: <span class="self">self</span>.gap.unwrap_or(style.gap),
+        }
+    }
+}
+
 <span class="attr">#[doc(hidden)]
-</span><span class="kw">pub struct </span>StackState&lt;V&gt; {
-    style: StackStyle&lt;V&gt;,
+</span><span class="kw">pub struct </span>StackState {
+    style: StackStyle,
     flex_sum: f32,
     majors: Vec&lt;f32&gt;,
     minors: Vec&lt;f32&gt;,
 }
 
-<span class="kw">impl</span>&lt;V&gt; StackState&lt;V&gt; {
-    <span class="kw">fn </span>new&lt;T&gt;(stack: <span class="kw-2">&amp;</span>Stack&lt;V&gt;, styles: <span class="kw-2">&amp;</span>Styles) -&gt; <span class="self">Self
-    </span><span class="kw">where
-        </span>V: ViewSeq&lt;T&gt;,
-    {
+<span class="kw">impl </span>StackState {
+    <span class="kw">fn </span>new&lt;T, V: ViewSeq&lt;T&gt;&gt;(stack: <span class="kw-2">&amp;</span>Stack&lt;V&gt;, style: <span class="kw-2">&amp;</span>StackStyle) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            style: stack.style(styles),
+            style: stack.style(style),
             flex_sum: <span class="number">0.0</span>,
             majors: <span class="macro">vec!</span>[<span class="number">0.0</span>; stack.content.len()],
             minors: <span class="macro">vec!</span>[<span class="number">0.0</span>; stack.content.len()],
@@ -611,13 +679,11 @@
 }
 
 <span class="kw">impl</span>&lt;T, V: ViewSeq&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Stack&lt;V&gt; {
-    <span class="kw">type </span>State = (StackState&lt;V&gt;, SeqState&lt;T, V&gt;);
+    <span class="kw">type </span>State = (StackState, SeqState&lt;T, V&gt;);
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
-        cx.set_class(<span class="string">"stack"</span>);
-
         (
-            StackState::new(<span class="self">self</span>, cx.styles()),
+            StackState::new(<span class="self">self</span>, cx.style()),
             <span class="self">self</span>.content.build(cx, data),
         )
     }
@@ -630,7 +696,7 @@
         old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
     ) {
         Rebuild::rebuild(<span class="self">self</span>, cx, old);
-        state.style.rebuild(<span class="self">self</span>, cx);
+        <span class="self">self</span>.rebuild_style(cx, <span class="kw-2">&amp;mut </span>state.style);
 
         <span class="kw">if </span><span class="self">self</span>.content.len() != old.content.len() {
             state.resize(<span class="self">self</span>.content.len());
@@ -722,7 +788,7 @@
     stack: <span class="kw-2">&amp;mut </span>Stack&lt;V&gt;,
     cx: <span class="kw-2">&amp;mut </span>LayoutCx,
     content: <span class="kw-2">&amp;mut </span>SeqState&lt;T, V&gt;,
-    state: <span class="kw-2">&amp;mut </span>StackState&lt;V&gt;,
+    state: <span class="kw-2">&amp;mut </span>StackState,
     data: <span class="kw-2">&amp;mut </span>T,
     max_major: f32,
     min_minor: f32,

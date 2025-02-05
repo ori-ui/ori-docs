@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":["Stylable"],"fn":["comp","hash_style_key","hash_style_key_u64","style","val"],"struct":["ParseError","Style","Styled","Styles","Theme"],"trait":["Stylable"],"type":["Computed"]};
+window.SIDEBAR_ITEMS = {"struct":["StyleBuilder","Styles","Theme"],"trait":["IntoStyleBuilder","Stylable","Style"]};
