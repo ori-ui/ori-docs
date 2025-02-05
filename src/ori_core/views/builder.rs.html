@@ -84,7 +84,8 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
     layout::{Size, Space},
@@ -143,6 +144,7 @@
             <span class="kw">let </span>new_view = builder(<span class="kw-2">&amp;mut </span>cx.as_build_cx(), data);
             <span class="kw">let </span><span class="kw-2">mut </span>new_view = Pod::new(new_view);
             new_view.rebuild(state, cx, data, view);
+            <span class="kw-2">*</span>view = new_view;
         }
     }
 
