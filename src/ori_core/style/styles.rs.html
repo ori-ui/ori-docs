@@ -240,9 +240,9 @@
     <span class="doccomment">/// Rebuild the style of the object.
     </span><span class="kw">fn </span>rebuild_style(<span class="kw-2">&amp;</span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>RebuildCx, style: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Style)
     <span class="kw">where
-        </span><span class="self">Self</span>::Style: Rebuild,
+        </span><span class="self">Self</span>::Style: Rebuild + <span class="lifetime">'static</span>,
     {
-        <span class="kw">let </span>new = <span class="self">self</span>.style(style);
+        <span class="kw">let </span>new = <span class="self">self</span>.style(cx.style());
         new.rebuild(cx, style);
         <span class="kw-2">*</span>style = new;
     }
