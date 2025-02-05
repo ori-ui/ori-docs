@@ -284,7 +284,15 @@
 <a href="#283" id="283">283</a>
 <a href="#284" id="284">284</a>
 <a href="#285" id="285">285</a>
-<a href="#286" id="286">286</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt::Display,
     ops::{Deref, DerefMut},
 };
@@ -293,7 +301,7 @@
     canvas::{BorderRadius, BorderWidth, Canvas, Curve, FillRule, Mask, Paint, Stroke},
     layout::{Affine, Point, Rect, Size, Vector},
     text::{FontAttributes, Paragraph, TextAlign, TextWrap},
-    view::ViewState,
+    view::{ViewId, ViewState},
     window::Window,
 };
 
@@ -490,19 +498,40 @@
         })
     }
 
-    <span class="doccomment">/// Draw a hoverable layer.
-    </span><span class="kw">pub fn </span>hoverable&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>DrawCx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'b</span>&gt;) -&gt; T) -&gt; T {
-        <span class="self">self</span>.canvas.hoverable(<span class="self">self</span>.id(), |canvas| {
+    <span class="doccomment">/// Draw a layer, with a transform, mask, and view.
+    </span><span class="kw">pub fn </span>layer&lt;T&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        transform: Affine,
+        mask: <span class="prelude-ty">Option</span>&lt;Mask&gt;,
+        view: <span class="prelude-ty">Option</span>&lt;ViewId&gt;,
+        f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>DrawCx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'b</span>&gt;) -&gt; T,
+    ) -&gt; T {
+        <span class="kw">let </span>visible = <span class="kw">match </span><span class="self">self</span>.visible.is_infinite() {
+            <span class="bool-val">false </span>=&gt; <span class="self">self</span>.visible.transform(transform.inverse()),
+            <span class="bool-val">true </span>=&gt; <span class="self">self</span>.visible,
+        };
+
+        <span class="kw">let </span>visible = <span class="kw">match </span>mask {
+            <span class="prelude-val">Some</span>(<span class="kw-2">ref </span>mask) =&gt; visible.intersection(mask.curve.bounds()),
+            <span class="prelude-val">None </span>=&gt; visible,
+        };
+
+        <span class="self">self</span>.canvas.layer(transform, mask, view, |canvas| {
             <span class="kw">let </span><span class="kw-2">mut </span>cx = DrawCx {
                 base: <span class="self">self</span>.base,
                 view_state: <span class="self">self</span>.view_state,
-                transform: <span class="self">self</span>.transform,
+                transform: <span class="self">self</span>.transform * transform,
                 canvas,
-                visible: <span class="self">self</span>.visible,
+                visible,
             };
 
             f(<span class="kw-2">&amp;mut </span>cx)
         })
+    }
+
+    <span class="doccomment">/// Draw a hoverable layer.
+    </span><span class="kw">pub fn </span>hoverable&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>DrawCx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'b</span>&gt;) -&gt; T) -&gt; T {
+        <span class="self">self</span>.layer(Affine::IDENTITY, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="self">self</span>.id()), f)
     }
 
     <span class="doccomment">/// Draw a layer with a transform.
@@ -554,20 +583,7 @@
         mask: <span class="kw">impl </span>Into&lt;Mask&gt;,
         f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>DrawCx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'b</span>&gt;) -&gt; T,
     ) -&gt; T {
-        <span class="kw">let </span>mask = mask.into();
-        <span class="kw">let </span>visible = <span class="self">self</span>.visible.intersection(mask.curve.bounds());
-
-        (<span class="self">self</span>.canvas).layer(Affine::IDENTITY, <span class="prelude-val">Some</span>(mask), <span class="prelude-val">None</span>, |canvas| {
-            <span class="kw">let </span><span class="kw-2">mut </span>cx = DrawCx {
-                base: <span class="self">self</span>.base,
-                view_state: <span class="self">self</span>.view_state,
-                transform: <span class="self">self</span>.transform,
-                canvas,
-                visible,
-            };
-
-            f(<span class="kw-2">&amp;mut </span>cx)
-        })
+        <span class="self">self</span>.layer(Affine::IDENTITY, <span class="prelude-val">Some</span>(mask.into()), <span class="prelude-val">None</span>, f)
     }
 }
 </code></pre></div></section></main></body></html>

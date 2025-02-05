@@ -167,7 +167,12 @@
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
-<a href="#169" id="169">169</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     hash::{Hash, Hasher},
     ops::{Add, AddAssign, BitAnd, BitAndAssign, Sub, SubAssign},
 };
@@ -209,6 +214,11 @@
     <span class="doccomment">/// Create a new space.
     </span><span class="kw">pub const fn </span>new(min: Size, max: Size) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{ min, max }
+    }
+
+    <span class="doccomment">/// Create a new space from a maximum size.
+    </span><span class="kw">pub const fn </span>max(max: Size) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(Size::ZERO, max)
     }
 
     <span class="doccomment">/// Create a new space with the same minimum and maximum size.

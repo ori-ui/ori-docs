@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["any","pod"],"struct":["Pod","PodSeq","SeqState","State","Update","ViewFlags","ViewId","ViewState"],"trait":["AnyView","View","ViewSeq"],"type":["AnyState","BoxedView"]};
+window.SIDEBAR_ITEMS = {"fn":["any","pod"],"struct":["Pod","PodSeq","PodState","SeqState","Update","ViewFlags","ViewId","ViewState"],"trait":["AnyView","View","ViewSeq"],"type":["AnyState","BoxedView"]};

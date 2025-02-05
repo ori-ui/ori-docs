@@ -180,7 +180,7 @@
     context::{BaseCx, BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
     layout::{Size, Space},
-    view::{Pod, State, View},
+    view::{Pod, PodState, View},
 };
 
 <span class="doccomment">/// Create a new [`Suspense`] view.
@@ -228,9 +228,9 @@
     F::Output: View&lt;T&gt;,
 {
     id: SuspenseId,
-    fallback_state: <span class="prelude-ty">Option</span>&lt;State&lt;T, V&gt;&gt;,
+    fallback_state: <span class="prelude-ty">Option</span>&lt;PodState&lt;T, V&gt;&gt;,
     future: <span class="prelude-ty">Option</span>&lt;Pod&lt;F::Output&gt;&gt;,
-    future_state: <span class="prelude-ty">Option</span>&lt;State&lt;T, F::Output&gt;&gt;,
+    future_state: <span class="prelude-ty">Option</span>&lt;PodState&lt;T, F::Output&gt;&gt;,
 }
 
 <span class="attr">#[derive(Clone, Copy, Default, PartialEq)]

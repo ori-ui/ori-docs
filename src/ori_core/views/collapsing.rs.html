@@ -279,7 +279,7 @@
     rebuild::Rebuild,
     style::{Stylable, Styled, Theme},
     transition::Transition,
-    view::{Pod, State, View},
+    view::{Pod, PodState, View},
 };
 
 <span class="doccomment">/// Create a new [`Collapsing`].
@@ -377,8 +377,8 @@
 <span class="attr">#[doc(hidden)]
 </span><span class="kw">pub struct </span>CollapsingState&lt;T, H: View&lt;T&gt;, V: View&lt;T&gt;&gt; {
     style: CollapsingStyle&lt;T, H, V&gt;,
-    header: State&lt;T, H&gt;,
-    content: State&lt;T, V&gt;,
+    header: PodState&lt;T, H&gt;,
+    content: PodState&lt;T, V&gt;,
     open: bool,
     t: f32,
 }

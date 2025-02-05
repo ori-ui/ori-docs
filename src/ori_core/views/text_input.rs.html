@@ -820,7 +820,9 @@
 <a href="#819" id="819">819</a>
 <a href="#820" id="820">820</a>
 <a href="#821" id="821">821</a>
-<a href="#822" id="822">822</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::Color,
@@ -1294,7 +1296,7 @@
         }
 
         <span class="kw">match </span>event {
-            Event::PointerPressed(e) <span class="kw">if </span>cx.is_hovered() =&gt; {
+            Event::PointerReleased(e) <span class="kw">if </span>e.clicked &amp;&amp; cx.is_hovered() =&gt; {
                 <span class="kw">let </span>local = cx.local(e.position);
                 <span class="kw">let </span>cursor = state.select_point(local);
 
@@ -1308,6 +1310,7 @@
 
             Event::PointerPressed(<span class="kw">_</span>) =&gt; {
                 cx.set_focused(<span class="bool-val">false</span>);
+                cx.draw();
 
                 <span class="bool-val">false
             </span>}
@@ -1482,6 +1485,7 @@
 
                 <span class="bool-val">false
             </span>}
+
             <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
         }
     }

@@ -102,7 +102,7 @@
     event::Event,
     layout::{Affine, Size, Space, Vector},
     rebuild::Rebuild,
-    view::{Pod, State, View},
+    view::{Pod, PodState, View},
 };
 
 <span class="doccomment">/// Create a new [`Transform`] view.
@@ -152,7 +152,7 @@
 }
 
 <span class="kw">impl</span>&lt;T, V: View&lt;T&gt;&gt; View&lt;T&gt; <span class="kw">for </span>Transform&lt;V&gt; {
-    <span class="kw">type </span>State = State&lt;T, V&gt;;
+    <span class="kw">type </span>State = PodState&lt;T, V&gt;;
 
     <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
         <span class="self">self</span>.content.build(cx, data)

@@ -186,7 +186,7 @@
     <span class="kw">type </span>Output = Vector;
 
     <span class="kw">fn </span>mul(<span class="self">self</span>, rhs: Vector) -&gt; <span class="self">Self</span>::Output {
-        <span class="self">self</span>.matrix * rhs
+        <span class="self">self</span>.matrix * rhs + <span class="self">self</span>.translation
     }
 }
 
