@@ -1422,7 +1422,7 @@
         }
 
         <span class="kw">match </span>event {
-            Event::PointerReleased(e) <span class="kw">if </span>e.clicked &amp;&amp; cx.is_hovered() =&gt; {
+            Event::PointerPressed(e) <span class="kw">if </span>cx.is_hovered() =&gt; {
                 <span class="kw">let </span>local = cx.local(e.position);
                 <span class="kw">let </span>cursor = state.select_point(local);
 
