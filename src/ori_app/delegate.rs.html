@@ -95,7 +95,7 @@
 
 <span class="kw">use crate</span>::{AppRequest, UiBuilder};
 
-<span class="doccomment">/// The context passed to the [`Delegate`] trait.
+<span class="doccomment">/// The context passed to the [`AppDelegate`] trait.
 </span><span class="kw">pub struct </span>DelegateCx&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>, T&gt; {
     base: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>BaseCx&lt;<span class="lifetime">'b</span>&gt;,
     requests: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>Vec&lt;AppRequest&lt;T&gt;&gt;,

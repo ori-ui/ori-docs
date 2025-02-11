@@ -1,2 +1,124 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Styling and theming."><title>ori::prelude::style - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="ori" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../ori/index.html">ori</a><span class="version">0.1.0-alpha.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module style</a></h2><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#traits" title="Traits">Traits</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In ori::<wbr>prelude</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="../../index.html">ori</a>::<wbr><a href="../index.html">prelude</a></span><h1>Module <span>style</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Styling and theming.</p>
-</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.StyleBuilder.html" title="struct ori::prelude::style::StyleBuilder">Style<wbr>Builder</a></div><div class="desc docblock-short">A style builder.</div></li><li><div class="item-name"><a class="struct" href="struct.Styles.html" title="struct ori::prelude::style::Styles">Styles</a></div><div class="desc docblock-short">A collection of styles.</div></li><li><div class="item-name"><a class="struct" href="struct.Theme.html" title="struct ori::prelude::style::Theme">Theme</a></div><div class="desc docblock-short">A theme.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.IntoStyleBuilder.html" title="trait ori::prelude::style::IntoStyleBuilder">Into<wbr>Style<wbr>Builder</a></div><div class="desc docblock-short">A trait for converting a function into a style builder.</div></li><li><div class="item-name"><a class="trait" href="trait.Stylable.html" title="trait ori::prelude::style::Stylable">Stylable</a></div><div class="desc docblock-short">A trait for stylable objects.</div></li><li><div class="item-name"><a class="trait" href="trait.Style.html" title="trait ori::prelude::style::Style">Style</a></div><div class="desc docblock-short">A trait for styles.</div></li></ul></section></div></main></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Styling and theming."><title>ori::prelude::style - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="ori" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../ori/index.html">ori</a><span class="version">0.1.0-alpha.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module style</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#example" title="Example">Example</a></li></ul><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#traits" title="Traits">Traits</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In ori::<wbr>prelude</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="../../index.html">ori</a>::<wbr><a href="../index.html">prelude</a></span><h1>Module <span>style</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Styling and theming.</p>
+<h2 id="example"><a class="doc-anchor" href="#example">§</a>Example</h2>
+<p>The below example demonstrates how a view with styling can be implemented.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="kw">struct </span>MyStyle {
+    <span class="comment">// we use `rebuild` to draw the view when `my_color` changes
+    </span><span class="attr">#[rebuild(draw)]
+    </span>my_color: Color,
+
+    <span class="comment">// we use `rebuild` to layout the view when `my_padding` changes
+    </span><span class="attr">#[rebuild(layout)]
+    </span>my_padding: Padding,
+}
+
+<span class="comment">// `Style` must be implemented for use in `Styles`
+</span><span class="kw">impl </span>Style <span class="kw">for </span>MyStyle {
+    <span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+        StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme, button: <span class="kw-2">&amp;</span>ButtonStyle| MyStyle {
+            my_color: theme.accent,
+            my_padding: button.padding,
+        })
+    }
+}
+
+<span class="attr">#[derive(Rebuild)]
+</span><span class="kw">struct </span>MyView {
+    <span class="comment">// we use this field to override the color of the style
+    //
+    // note that this field doesn't have the `rebuild` attribute, this is
+    // because `MyStyle` already has a `rebuild` attribute for `my_color`
+    // and we only care about when the style changes
+    </span>my_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
+
+    <span class="comment">// this field is not related to the style
+    </span><span class="attr">#[rebuild(layout)]
+    </span>non_styled_field: String,
+}
+
+<span class="kw">impl </span>Stylable <span class="kw">for </span>MyView {
+    <span class="kw">type </span>Style = MyStyle;
+
+    <span class="kw">fn </span>style(<span class="kw-2">&amp;</span><span class="self">self</span>, base: <span class="kw-2">&amp;</span><span class="self">Self</span>::Style) -&gt; <span class="self">Self</span>::Style {
+        MyStyle {
+            my_color: <span class="self">self</span>.my_color.unwrap_or(base.my_color),
+             
+            <span class="comment">// generally it's preferred to be able to override every field of the style
+            // even though it's not required, the current implementation of `MyView` doesn't
+            // allow overriding `my_padding`
+            </span>..base.clone()
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;T&gt; View&lt;T&gt; <span class="kw">for </span>MyView {
+    <span class="comment">// we need to store the style in the `State` of our `View` implementation
+    </span><span class="kw">type </span>State = MyStyle;
+
+    <span class="kw">fn </span>build(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cx: <span class="kw-2">&amp;mut </span>BuildCx, _data: <span class="kw-2">&amp;mut </span>T) -&gt; <span class="self">Self</span>::State {
+        <span class="comment">// we build the `style` in the `build` method
+        </span><span class="self">self</span>.style(cx.style())
+    }
+
+    <span class="kw">fn </span>rebuild(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        state: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
+        cx: <span class="kw-2">&amp;mut </span>RebuildCx,
+        _data: <span class="kw-2">&amp;mut </span>T,
+        _old: <span class="kw-2">&amp;</span><span class="self">Self</span>,
+    ) {
+        <span class="comment">// we rebuild the `style` in the `rebuild` method
+        </span><span class="self">self</span>.rebuild_style(cx, state);
+    }
+
+    <span class="kw">fn </span>event(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        _state: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
+        _cx: <span class="kw-2">&amp;mut </span>EventCx,
+        _data: <span class="kw-2">&amp;mut </span>T,
+        _event: <span class="kw-2">&amp;</span>Event,
+    ) -&gt; bool {
+        <span class="comment">// we don't care about events in this example
+        </span><span class="bool-val">false
+    </span>}
+     
+    <span class="kw">fn </span>layout(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        state: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
+        cx: <span class="kw-2">&amp;mut </span>LayoutCx,
+        _data: <span class="kw-2">&amp;mut </span>T,
+        space: Space,
+    ) -&gt; Size {
+        <span class="comment">// we create a paragraph with the non-styled field
+        </span><span class="kw">let </span>paragraph = Paragraph::new(<span class="number">1.0</span>, TextAlign::Start, TextWrap::Word)
+            .with_text(<span class="kw-2">&amp;</span><span class="self">self</span>.non_styled_field, Default::default());
+
+        <span class="comment">// we calculate the size that the padding will take
+        </span><span class="kw">let </span>pad_size = state.my_padding.size();
+
+        <span class="comment">// we calculate the maximum width that the paragraph can take
+        </span><span class="kw">let </span>max_width = space.max.width - pad_size.width;
+
+        <span class="comment">// we measure the paragraph
+        </span><span class="kw">let </span>size = cx.measure_paragraph(<span class="kw-2">&amp;</span>paragraph, max_width);
+
+        <span class="comment">// we constrain the size of the view to fit the space given
+        </span>space.fit(size + pad_size)
+    }
+     
+    <span class="kw">fn </span>draw(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        state: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State,
+        cx: <span class="kw-2">&amp;mut </span>DrawCx,
+        _data: <span class="kw-2">&amp;mut </span>T,
+    ) {
+        <span class="comment">// we create a paragraph with the non-styled field
+        </span><span class="kw">let </span>paragraph = Paragraph::new(<span class="number">1.0</span>, TextAlign::Start, TextWrap::Word)
+            .with_text(<span class="kw-2">&amp;</span><span class="self">self</span>.non_styled_field, Default::default());
+
+        <span class="comment">// we draw the paragraph offset by the padding
+        </span>cx.paragraph(<span class="kw-2">&amp;</span>paragraph, cx.rect() + state.my_padding.offset());
+    }
+}</code></pre></div>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.StyleBuilder.html" title="struct ori::prelude::style::StyleBuilder">Style<wbr>Builder</a></div><div class="desc docblock-short">A style builder.</div></li><li><div class="item-name"><a class="struct" href="struct.Styles.html" title="struct ori::prelude::style::Styles">Styles</a></div><div class="desc docblock-short">A collection of <a href="../trait.Style.html" title="trait ori::prelude::Style"><code>Style</code></a>s.</div></li><li><div class="item-name"><a class="struct" href="struct.Theme.html" title="struct ori::prelude::style::Theme">Theme</a></div><div class="desc docblock-short">A theme.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.IntoStyleBuilder.html" title="trait ori::prelude::style::IntoStyleBuilder">Into<wbr>Style<wbr>Builder</a></div><div class="desc docblock-short">A trait for converting a function into a style builder.</div></li><li><div class="item-name"><a class="trait" href="trait.Stylable.html" title="trait ori::prelude::style::Stylable">Stylable</a></div><div class="desc docblock-short">A trait for stylable objects.</div></li><li><div class="item-name"><a class="trait" href="trait.Style.html" title="trait ori::prelude::style::Style">Style</a></div><div class="desc docblock-short">A trait implemented by styles.</div></li></ul></section></div></main></body></html>

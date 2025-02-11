@@ -484,7 +484,7 @@
 }
 
 <span class="kw">impl </span>Style <span class="kw">for </span>TooltipStyle {
-    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
         StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| <span class="self">Self </span>{
             delay: <span class="number">0.2</span>,
             padding: Padding::all(<span class="number">4.0</span>),

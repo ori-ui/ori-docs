@@ -4,7 +4,7 @@
         &amp;mut self,
         cx: &amp;mut <a class="struct" href="struct.DelegateCx.html" title="struct ori_app::DelegateCx">DelegateCx</a>&lt;'_, '_, T&gt;,
         data: <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.reference.html">&amp;mut T</a>,
-        event: &amp;<a class="enum" href="../ori_core/event/event/enum.Event.html" title="enum ori_core::event::event::Event">Event</a>,
+        event: &amp;Event,
     ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.bool.html">bool</a>;
 
     // Provided methods
@@ -15,7 +15,7 @@
     &amp;mut self,
     cx: &amp;mut <a class="struct" href="struct.DelegateCx.html" title="struct ori_app::DelegateCx">DelegateCx</a>&lt;'_, '_, T&gt;,
     data: <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.reference.html">&amp;mut T</a>,
-    event: &amp;<a class="enum" href="../ori_core/event/event/enum.Event.html" title="enum ori_core::event::event::Event">Event</a>,
+    event: &amp;Event,
 ) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.bool.html">bool</a></h4></section></summary><div class="docblock"><p>Handle an event.</p>
 </div></details></div><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.init" class="method"><a class="src rightside" href="../src/ori_app/delegate.rs.html#75-77">Source</a><h4 class="code-header">fn <a href="#method.init" class="fn">init</a>(&amp;mut self, cx: &amp;mut <a class="struct" href="struct.DelegateCx.html" title="struct ori_app::DelegateCx">DelegateCx</a>&lt;'_, '_, T&gt;, data: <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.reference.html">&amp;mut T</a>)</h4></section></summary><div class="docblock"><p>Called when the application is initialized.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.idle" class="method"><a class="src rightside" href="../src/ori_app/delegate.rs.html#80-82">Source</a><h4 class="code-header">fn <a href="#method.idle" class="fn">idle</a>(&amp;mut self, cx: &amp;mut <a class="struct" href="struct.DelegateCx.html" title="struct ori_app::DelegateCx">DelegateCx</a>&lt;'_, '_, T&gt;, data: <a class="primitive" href="https://doc.rust-lang.org/1.84.1/std/primitive.reference.html">&amp;mut T</a>)</h4></section></summary><div class="docblock"><p>Called when the application is idle.</p>

@@ -228,7 +228,10 @@
 <a href="#227" id="227">227</a>
 <a href="#228" id="228">228</a>
 <a href="#229" id="229">229</a>
-<a href="#230" id="230">230</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::Event,
     layout::{Size, Space},
@@ -246,8 +249,10 @@
 /// it in a tuple `(MyState, State)`.
 ///
 /// In case a view contains another view the contents should always be wrapped in
-/// either [`State`] or [`SeqState`]. If this is not done strange issues
+/// either [`PodState`] or [`SeqState`]. If this is not done strange issues
 /// are _very_ likely to occur.
+///
+/// For information on styling see [`style`].
 ///
 /// [`View`] has four primary methods:
 /// - [`View::rebuild`] is called after a new `view-tree` has been built, on the
@@ -267,12 +272,13 @@
 /// For examples see the implementation of views like [`Button`] or [`Checkbox`].
 ///
 /// [`BaseCx::cmd`]: crate::context::BaseCx::cmd
-/// [`State`]: super::State
+/// [`PodState`]: super::PodState
 /// [`SeqState`]: super::SeqState
 /// [`ViewState`]: super::ViewState
 /// [`Rebuild`]: crate::rebuild::Rebuild
 /// [`Button`]: crate::views::Button
 /// [`Checkbox`]: crate::views::Checkbox
+/// [`style`]: crate::style
 </span><span class="kw">pub trait </span>View&lt;T: <span class="question-mark">?</span>Sized = ()&gt; {
     <span class="doccomment">/// The state of the view, see top-level documentation for more information.
     </span><span class="kw">type </span>State;

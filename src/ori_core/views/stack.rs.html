@@ -513,7 +513,7 @@
 }
 
 <span class="kw">impl </span>Style <span class="kw">for </span>StackStyle {
-    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
         StyleBuilder::new(|| <span class="self">Self </span>{
             justify: Justify::Start,
             align: Align::Center,

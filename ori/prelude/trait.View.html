@@ -40,8 +40,9 @@ When calling <a href="trait.View.html#tymethod.build" title="method ori::prelude
 another view must also store it’s child’s state. This is usually done by wrapping
 it in a tuple <code>(MyState, State)</code>.</p>
 <p>In case a view contains another view the contents should always be wrapped in
-either <a href="super::State"><code>State</code></a> or <a href="struct.SeqState.html" title="struct ori::prelude::SeqState"><code>SeqState</code></a>. If this is not done strange issues
+either <a href="struct.PodState.html" title="struct ori::prelude::PodState"><code>PodState</code></a> or <a href="struct.SeqState.html" title="struct ori::prelude::SeqState"><code>SeqState</code></a>. If this is not done strange issues
 are <em>very</em> likely to occur.</p>
+<p>For information on styling see <a href="style/index.html" title="mod ori::prelude::style"><code>style</code></a>.</p>
 <p><a href="trait.View.html" title="trait ori::prelude::View"><code>View</code></a> has four primary methods:</p>
 <ul>
 <li><a href="trait.View.html#tymethod.rebuild" title="method ori::prelude::View::rebuild"><code>View::rebuild</code></a> is called after a new <code>view-tree</code> has been built, on the

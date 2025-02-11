@@ -211,9 +211,100 @@
 <a href="#210" id="210">210</a>
 <a href="#211" id="211">211</a>
 <a href="#212" id="212">212</a>
-<a href="#213" id="213">213</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::{Any, TypeId},
     collections::HashMap,
+    fmt::{<span class="self">self</span>, Debug},
     hash::BuildHasherDefault,
 };
 
@@ -221,10 +312,50 @@
 
 <span class="kw">use crate</span>::{context::RebuildCx, rebuild::Rebuild};
 
-<span class="doccomment">/// A trait for styles.
+<span class="doccomment">/// A trait implemented by styles.
+///
+/// This will allow the style to be used in the arguments of [`StyleBuilder`] functions.
+///
+/// # Example
+/// ```rust
+/// # use ori_core::{
+/// #    style::{Style, Styles, StyleBuilder, Theme},
+/// #    views::ButtonStyle,
+/// #    canvas::Color,
+/// #    layout::Padding,
+/// # };
+/// struct MyStyle {
+///     my_color: Color,
+///     my_padding: Padding,
+/// }
+///
+/// impl Style for MyStyle {
+///     fn default_style() -&gt; StyleBuilder&lt;Self&gt; {
+///         StyleBuilder::new(|theme: &amp;Theme, button: &amp;ButtonStyle| MyStyle {
+///             my_color: theme.accent,
+///             my_padding: button.padding,
+///         })
+///     }
+/// }
+///
+/// let mut styles = Styles::new()
+///     .with(|| Theme {
+///         accent: Color::rgb(1.0, 0.0, 0.0),
+///         ..Theme::default()
+///     })
+///     .with(|theme: &amp;Theme| ButtonStyle {
+///         padding: Padding::all(10.0),
+///         ..Default::default()
+///     });
+///
+/// let my_style = styles.style::&lt;MyStyle&gt;();
+///
+/// assert_eq!(my_style.my_color, Color::rgb(1.0, 0.0, 0.0));
+/// assert_eq!(my_style.my_padding, Padding::all(10.0));
+/// ```
 </span><span class="kw">pub trait </span>Style: Sized {
-    <span class="doccomment">/// The default style builder.
-    </span><span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt;;
+    <span class="doccomment">/// The default style of the object.
+    </span><span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt;;
 }
 
 <span class="doccomment">/// A trait for stylable objects.
@@ -248,11 +379,19 @@
     }
 }
 
-<span class="doccomment">/// A collection of styles.
+<span class="doccomment">/// A collection of [`Style`]s.
 </span><span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>Styles {
     builders: HashMap&lt;TypeId, StyleBuilder&lt;Box&lt;<span class="kw">dyn </span>Any&gt;&gt;, StylesHasher&gt;,
     cache: HashMap&lt;TypeId, Box&lt;<span class="kw">dyn </span>Any&gt;, StylesHasher&gt;,
+}
+
+<span class="kw">impl </span>Debug <span class="kw">for </span>Styles {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+        f.debug_struct(<span class="string">"Styles"</span>)
+            .field(<span class="string">"builders"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.builders)
+            .finish()
+    }
 }
 
 <span class="kw">type </span>StylesHasher = BuildHasherDefault&lt;SeaHasher&gt;;
@@ -271,26 +410,24 @@
 
     <span class="doccomment">/// Insert a style builder into the collection.
     ///
+    /// See [`StyleBuilder::new`] for more information.
+    ///
     /// # Example
     ///
     /// ```rust
     /// # use ori_core::{style::{Styles, Theme}, views::ButtonStyle};
     /// Styles::new().insert(|theme: &amp;Theme| ButtonStyle {
     ///     color: theme.accent,
-    ///     ..todo!()
+    ///     ..Default::default()
     /// });
     /// ```
     </span><span class="kw">pub fn </span>insert&lt;T, B&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, builder: B) -&gt; bool
     <span class="kw">where
         </span>B: IntoStyleBuilder&lt;T&gt; + <span class="lifetime">'static</span>,
-        B::Output: Any,
+        B::Output: Style + Any,
     {
         <span class="kw">let </span>type_id = TypeId::of::&lt;B::Output&gt;();
-
-        <span class="kw">let </span>dyn_builder = StyleBuilder {
-            builder: Box::new(<span class="kw">move </span>|styles| Box::new(builder.build(styles)) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Any&gt;),
-            dependencies: B::dependencies(),
-        };
+        <span class="kw">let </span>dyn_builder = StyleBuilder::new(builder).into_dyn();
 
         <span class="kw">if </span><span class="self">self</span>.builders.contains_key(<span class="kw-2">&amp;</span>type_id) {
             <span class="self">self</span>.cache.clear();
@@ -301,11 +438,21 @@
 
     <span class="doccomment">/// Insert a style builder into the collection.
     ///
-    /// See [`Styles::insert`] for more information.
+    /// See [`StyleBuilder::new`] for more information.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// # use ori_core::{style::{Styles, Theme}, views::ButtonStyle};
+    /// let styles = Styles::new().with(|theme: &amp;Theme| ButtonStyle {
+    ///    color: theme.accent,
+    ///    ..Default::default()
+    /// });
+    /// ```
     </span><span class="kw">pub fn </span>with&lt;T, B&gt;(<span class="kw-2">mut </span><span class="self">self</span>, builder: B) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>B: IntoStyleBuilder&lt;T&gt; + <span class="lifetime">'static</span>,
-        B::Output: Any,
+        B::Output: Style + Any,
     {
         <span class="self">self</span>.insert(builder);
         <span class="self">self
@@ -326,7 +473,7 @@
             <span class="kw">return </span><span class="self">self</span>.get::&lt;T&gt;().unwrap();
         }
 
-        <span class="kw">let </span>builder = T::builder().into_dyn();
+        <span class="kw">let </span>builder = T::default_style().into_dyn();
         <span class="self">self</span>.builders.insert(TypeId::of::&lt;T&gt;(), builder);
         <span class="self">self</span>.get::&lt;T&gt;().unwrap()
     }
@@ -356,42 +503,75 @@
 }
 
 <span class="doccomment">/// A style builder.
+///
+/// See the [`Style`] trait for an example.
 </span><span class="kw">pub struct </span>StyleBuilder&lt;T&gt; {
+    type_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
     builder: Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;mut </span>Styles) -&gt; T&gt;,
     dependencies: Vec&lt;TypeId&gt;,
 }
 
 <span class="kw">impl</span>&lt;T: Any&gt; StyleBuilder&lt;T&gt; {
     <span class="doccomment">/// Create a new style builder.
+    ///
+    /// This takes a function that takes any number of references to [`Style`]s and returns a style.
+    /// Each [`Style`] referenced will be created if not already present in the [`Styles`] collection.
+    /// If a style is dependent on this style, it will be rebuilt when this style is rebuilt.
+    ///
+    /// __Note:__ Cyclic dependencies are not allowed and will result in a panic.
     </span><span class="kw">pub fn </span>new&lt;U, B&gt;(builder: B) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>B: IntoStyleBuilder&lt;U, Output = T&gt; + <span class="lifetime">'static</span>,
     {
         <span class="self">Self </span>{
+            type_name: std::any::type_name::&lt;T&gt;(),
+            dependencies: B::dependencies(<span class="kw-2">&amp;</span>builder),
             builder: Box::new(<span class="kw">move </span>|styles| builder.build(styles)),
-            dependencies: B::dependencies(),
         }
     }
 
     <span class="kw">fn </span>into_dyn(<span class="self">self</span>) -&gt; StyleBuilder&lt;Box&lt;<span class="kw">dyn </span>Any&gt;&gt; {
         StyleBuilder {
+            type_name: <span class="self">self</span>.type_name,
             builder: Box::new(<span class="kw">move </span>|styles| Box::new((<span class="self">self</span>.builder)(styles))),
             dependencies: <span class="self">self</span>.dependencies,
         }
     }
 }
 
+<span class="kw">impl</span>&lt;T&gt; Debug <span class="kw">for </span>StyleBuilder&lt;T&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+        f.debug_struct(<span class="string">"StyleBuilder"</span>)
+            .field(<span class="string">"type_name"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.type_name)
+            .finish()
+    }
+}
+
 <span class="doccomment">/// A trait for converting a function into a style builder.
+///
+/// See [`StyleBuilder::new`] for more information.
 </span><span class="kw">pub trait </span>IntoStyleBuilder&lt;T&gt; {
-    <span class="doccomment">/// The output type.
+    <span class="doccomment">/// The type of style built by the builder.
     </span><span class="kw">type </span>Output;
 
     <span class="doccomment">/// Build the style.
     </span><span class="kw">fn </span>build(<span class="kw-2">&amp;</span><span class="self">self</span>, styles: <span class="kw-2">&amp;mut </span>Styles) -&gt; <span class="self">Self</span>::Output;
 
     <span class="doccomment">/// Get the dependencies of the style builder.
-    </span><span class="kw">fn </span>dependencies() -&gt; Vec&lt;TypeId&gt; {
+    </span><span class="kw">fn </span>dependencies(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;TypeId&gt; {
         Vec::new()
+    }
+}
+
+<span class="kw">impl</span>&lt;T&gt; IntoStyleBuilder&lt;StyleBuilder&lt;T&gt;&gt; <span class="kw">for </span>StyleBuilder&lt;T&gt; {
+    <span class="kw">type </span>Output = T;
+
+    <span class="kw">fn </span>build(<span class="kw-2">&amp;</span><span class="self">self</span>, styles: <span class="kw-2">&amp;mut </span>Styles) -&gt; <span class="self">Self</span>::Output {
+        (<span class="self">self</span>.builder)(styles)
+    }
+
+    <span class="kw">fn </span>dependencies(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;TypeId&gt; {
+        <span class="self">self</span>.dependencies.clone()
     }
 }
 
@@ -416,7 +596,7 @@
                 (<span class="self">self</span>)($(<span class="macro-nonterminal">$ty</span>.clone(),)<span class="kw-2">*</span>)
             }
 
-            <span class="kw">fn </span>dependencies() -&gt; Vec&lt;TypeId&gt; {
+            <span class="kw">fn </span>dependencies(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;TypeId&gt; {
                 <span class="macro">vec!</span>[$(TypeId::of::&lt;<span class="macro-nonterminal">$ty</span>&gt;()),<span class="kw-2">*</span>]
             }
         }

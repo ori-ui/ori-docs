@@ -96,7 +96,7 @@
 <span class="kw">use </span>ori_core::{
     command::{CommandProxy, CommandWaker},
     context::Contexts,
-    style::{IntoStyleBuilder, Styles},
+    style::{IntoStyleBuilder, Style, Styles},
     text::{include_font, FontSource, Fonts},
     window::Window,
 };
@@ -138,7 +138,7 @@
     </span><span class="kw">pub fn </span>style&lt;U, B&gt;(<span class="kw-2">mut </span><span class="self">self</span>, loader: B) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>B: IntoStyleBuilder&lt;U&gt; + <span class="lifetime">'static</span>,
-        B::Output: Any,
+        B::Output: Style + Any,
     {
         <span class="self">self</span>.styles.insert(loader);
         <span class="self">self

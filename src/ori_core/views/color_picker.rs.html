@@ -435,7 +435,7 @@
 }
 
 <span class="kw">impl </span>Style <span class="kw">for </span>ColorPickerStyle {
-    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
         StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| ColorPickerStyle {
             size: <span class="number">128.0</span>,
             border_width: <span class="number">2.0</span>,

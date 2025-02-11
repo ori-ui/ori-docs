@@ -285,7 +285,7 @@
 }
 
 <span class="doccomment">/// The style of a button.
-</span><span class="attr">#[derive(Clone, Rebuild)]
+</span><span class="attr">#[derive(Clone, Default, Rebuild)]
 </span><span class="kw">pub struct </span>ButtonStyle {
     <span class="doccomment">/// The padding.
     </span><span class="attr">#[rebuild(layout)]
@@ -317,7 +317,7 @@
 }
 
 <span class="kw">impl </span>Style <span class="kw">for </span>ButtonStyle {
-    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
         StyleBuilder::new(|theme: <span class="kw-2">&amp;</span>Theme| ButtonStyle {
             padding: Padding::all(<span class="number">8.0</span>),
             fancy: <span class="number">0.0</span>,

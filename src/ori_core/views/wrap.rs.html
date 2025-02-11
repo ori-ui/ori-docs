@@ -472,7 +472,7 @@
 }
 
 <span class="kw">impl </span>Style <span class="kw">for </span>WrapStyle {
-    <span class="kw">fn </span>builder() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
+    <span class="kw">fn </span>default_style() -&gt; StyleBuilder&lt;<span class="self">Self</span>&gt; {
         StyleBuilder::new(|| <span class="self">Self </span>{
             axis: Axis::Horizontal,
             justify: Justify::Start,
