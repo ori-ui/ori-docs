@@ -885,13 +885,18 @@
 <a href="#884" id="884">884</a>
 <a href="#885" id="885">885</a>
 <a href="#886" id="886">886</a>
-<a href="#887" id="887">887</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
+<a href="#890" id="890">890</a>
+<a href="#891" id="891">891</a>
+<a href="#892" id="892">892</a></pre></div><pre class="rust"><code><span class="kw">use </span>ori_macro::{example, Build};
 
 <span class="kw">use crate</span>::{
     canvas::Color,
     context::{BuildCx, DrawCx, EventCx, LayoutCx, RebuildCx},
     event::{Capitalize, Event, Ime, Key},
-    layout::{Point, Rect, Size, Space},
+    layout::{Point, Rect, Size, Space, Vector},
     rebuild::Rebuild,
     style::{Stylable, Style, StyleBuilder, Theme},
     text::{
@@ -1667,45 +1672,50 @@
     <span class="kw">fn </span>draw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span><span class="self">Self</span>::State, cx: <span class="kw-2">&amp;mut </span>DrawCx, _data: <span class="kw-2">&amp;mut </span>T) {
         cx.trigger(cx.rect());
 
-        <span class="kw">if </span>!state.text.is_empty() {
-            cx.paragraph(<span class="kw-2">&amp;</span>state.paragraph, cx.rect());
-        } <span class="kw">else </span>{
-            <span class="kw">let </span><span class="kw-2">mut </span>placeholder = Paragraph::new(
-                <span class="comment">// please, don't make this ugly rustfmt
-                </span>state.style.line_height,
-                state.style.align,
-                state.style.wrap,
-            );
+        <span class="kw">let </span>width = cx.size().width;
+        <span class="kw">let </span>size = cx.measure_paragraph(<span class="kw-2">&amp;</span>state.paragraph, width);
 
-            placeholder.set_text(
-                <span class="kw-2">&amp;</span><span class="self">self</span>.placeholder,
-                FontAttributes {
-                    size: state.style.font_size,
-                    family: state.style.font_family.clone(),
-                    weight: state.style.font_weight,
-                    stretch: state.style.font_stretch,
-                    style: state.style.font_style,
-                    ligatures: <span class="bool-val">false</span>,
-                    color: state.style.placeholder_color,
-                },
-            );
+        cx.translated(Vector::from(cx.size() - size) / <span class="number">2.0</span>, |cx| {
+            <span class="kw">if </span>!state.text.is_empty() {
+                cx.paragraph(<span class="kw-2">&amp;</span>state.paragraph, cx.rect());
+            } <span class="kw">else </span>{
+                <span class="kw">let </span><span class="kw-2">mut </span>placeholder = Paragraph::new(
+                    <span class="comment">// please, don't make this ugly rustfmt
+                    </span>state.style.line_height,
+                    state.style.align,
+                    state.style.wrap,
+                );
 
-            cx.paragraph(<span class="kw-2">&amp;</span>placeholder, cx.rect());
-        }
+                placeholder.set_text(
+                    <span class="kw-2">&amp;</span><span class="self">self</span>.placeholder,
+                    FontAttributes {
+                        size: state.style.font_size,
+                        family: state.style.font_family.clone(),
+                        weight: state.style.font_weight,
+                        stretch: state.style.font_stretch,
+                        style: state.style.font_style,
+                        ligatures: <span class="bool-val">false</span>,
+                        color: state.style.placeholder_color,
+                    },
+                );
 
-        <span class="kw">let </span>contrast = cx.theme().contrast;
-        <span class="kw">let </span>info = cx.theme().info;
-
-        <span class="comment">// draw the cursor
-        </span><span class="kw">if </span>cx.is_focused() {
-            <span class="kw">let </span>color = f32::cos(state.blink * <span class="number">5.0</span>).abs();
-
-            draw_highlight(state, cx, info.fade(<span class="number">0.5</span>));
-
-            <span class="kw">if </span>state.selection.is_none() {
-                draw_cursor(state, cx, contrast.fade(color));
+                cx.paragraph(<span class="kw-2">&amp;</span>placeholder, cx.rect());
             }
-        }
+
+            <span class="kw">let </span>contrast = cx.theme().contrast;
+            <span class="kw">let </span>info = cx.theme().info;
+
+            <span class="comment">// draw the cursor
+            </span><span class="kw">if </span>cx.is_focused() {
+                <span class="kw">let </span>color = f32::cos(state.blink * <span class="number">5.0</span>).abs();
+
+                draw_highlight(state, cx, info.fade(<span class="number">0.5</span>));
+
+                <span class="kw">if </span>state.selection.is_none() {
+                    draw_cursor(state, cx, contrast.fade(color));
+                }
+            }
+        });
     }
 }
 
