@@ -141,7 +141,9 @@
 <a href="#140" id="140">140</a>
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
-<a href="#143" id="143">143</a></pre></div><pre class="rust"><code><span class="doccomment">//! Styling and theming.
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a></pre></div><pre class="rust"><code><span class="doccomment">//! Styling and theming.
 //!
 //! # Example
 //! The below example demonstrates how a view with styling can be implemented.
@@ -172,9 +174,11 @@
 //! // `Style` must be implemented for use in `Styles`
 //! impl Style for MyStyle {
 //!     fn default_style() -&gt; StyleBuilder&lt;Self&gt; {
-//!         StyleBuilder::new(|theme: &amp;Theme, button: &amp;ButtonStyle| MyStyle {
-//!             my_color: theme.accent,
-//!             my_padding: button.padding,
+//!         StyleBuilder::new(|theme: &amp;Theme, button: &amp;ButtonStyle| {
+//!             MyStyle {
+//!                 my_color: theme.accent,
+//!                 my_padding: button.padding,
+//!             }
 //!         })
 //!     }
 //! }
