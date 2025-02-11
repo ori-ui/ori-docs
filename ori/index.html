@@ -4,10 +4,10 @@
 <a href="https://github.com/ori-ui/ori/tree/main"><img src="https://img.shields.io/crates/l/ori" alt="license" /></a></p>
 <p>Ori is a cross-platform declarative UI framework for Rust, with a focus on
 simplicity and performance.</p>
-<p>Ori is heavily inspired by SwiftUI and xilem, and uses a similar approach
-to building user interfaces. It is built on top of <em>ori_core</em>, which
-provides the core functionality, and <em>ori_winit</em>, which provides
-a winit based shell, and supports both a wgpu, and glow based renderer.</p>
+<p>Ori is heavily inspired by SwiftUI and xilem, and uses a similar approach to
+building user interfaces. It is built on top of <em>ori_core</em>, which provides the
+core functionality, a custom windowing shell in <em>ori_shell</em> and rendering with
+skia.</p>
 <h2 id="documentation"><a class="doc-anchor" href="#documentation">§</a>Documentation</h2>
 <p>Auto-generated documentation is available <a href="https://ori-ui.github.io/ori-docs/ori/"><code>here</code></a>.</p>
 <h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
@@ -62,6 +62,6 @@ a winit based shell, and supports both a wgpu, and glow based renderer.</p>
     </span><span class="kw">let </span>app = App::build().window(window, ui);
 
     <span class="comment">// Finally we launch the app.
-    </span>ori::run(app, <span class="kw-2">&amp;mut </span>Data::default());
+    </span>ori::run(app, <span class="kw-2">&amp;mut </span>Data::default()).unwrap();
 }</code></pre></div>
-</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="app/index.html" title="mod ori::app">app</a></div><div class="desc docblock-short">Ori <a href="ori_app"><code>app</code></a> module.</div></li><li><div class="item-name"><a class="mod" href="core/index.html" title="mod ori::core">core</a></div><div class="desc docblock-short">Ori <a href="../ori_core/index.html" title="mod ori_core"><code>core</code></a> module.</div></li><li><div class="item-name"><a class="mod" href="log/index.html" title="mod ori::log">log</a></div><div class="desc docblock-short">Ori <a href="core/log/index.html" title="mod ori::core::log"><code>log</code></a> module.</div></li><li><div class="item-name"><a class="mod" href="prelude/index.html" title="mod ori::prelude">prelude</a></div><div class="desc docblock-short">Convenient imports for Ori.</div></li></ul><h2 id="attributes" class="section-header">Attribute Macros<a href="#attributes" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="attr" href="attr.main.html" title="attr ori::main">main</a></div><div class="desc docblock-short">A macro to generate boilerplate for the <code>main</code> function.</div></li></ul></section></div></main></body></html>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="app/index.html" title="mod ori::app">app</a></div><div class="desc docblock-short">Ori <a href="ori_app"><code>app</code></a> module.</div></li><li><div class="item-name"><a class="mod" href="core/index.html" title="mod ori::core">core</a></div><div class="desc docblock-short">Ori <a href="ori_core"><code>core</code></a> module.</div></li><li><div class="item-name"><a class="mod" href="log/index.html" title="mod ori::log">log</a></div><div class="desc docblock-short">Ori <a href="core/log/index.html" title="mod ori::core::log"><code>log</code></a> module.</div></li><li><div class="item-name"><a class="mod" href="prelude/index.html" title="mod ori::prelude">prelude</a></div><div class="desc docblock-short">Convenient imports for Ori.</div></li></ul><h2 id="attributes" class="section-header">Attribute Macros<a href="#attributes" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="attr" href="attr.main.html" title="attr ori::main">main</a></div><div class="desc docblock-short">A macro to generate boilerplate for the <code>main</code> function.</div></li></ul></section></div></main></body></html>
