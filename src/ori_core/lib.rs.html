@@ -20,7 +20,11 @@
 <a href="#19" id="19">19</a>
 <a href="#20" id="20">20</a>
 <a href="#21" id="21">21</a>
-<a href="#22" id="22">22</a></pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::module_inception)]
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a></pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::module_inception)]
 #![warn(missing_docs)]
 
 </span><span class="doccomment">//! Core library for the Ori UI framework.
@@ -42,4 +46,8 @@
 <span class="kw">pub mod </span>views;
 
 <span class="kw">pub use </span>tracing <span class="kw">as </span>log;
+
+<span class="comment">// this is a workaround for proc-macros in doc tests
+//  - https://github.com/bkchr/proc-macro-crate/issues/14
+</span><span class="kw">extern crate </span><span class="self">self </span><span class="kw">as </span>ori_core;
 </code></pre></div></section></main></body></html>

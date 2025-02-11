@@ -265,13 +265,7 @@
 <a href="#264" id="264">264</a>
 <a href="#265" id="265">265</a>
 <a href="#266" id="266">266</a>
-<a href="#267" id="267">267</a>
-<a href="#268" id="268">268</a>
-<a href="#269" id="269">269</a>
-<a href="#270" id="270">270</a>
-<a href="#271" id="271">271</a>
-<a href="#272" id="272">272</a>
-<a href="#273" id="273">273</a></pre></div><pre class="rust"><code><span class="doccomment">//! Macros for the Ori crate.
+<a href="#267" id="267">267</a></pre></div><pre class="rust"><code><span class="doccomment">//! Macros for the Ori crate.
 
 </span><span class="attr">#![warn(missing_docs)]
 
@@ -284,17 +278,11 @@
 <span class="kw">fn </span>found_crate(krate: proc_macro_crate::FoundCrate, name: <span class="kw-2">&amp;</span>str) -&gt; syn::Path {
     <span class="kw">match </span>krate {
         proc_macro_crate::FoundCrate::Itself =&gt; {
-            <span class="kw">let </span>is_test = std::env::vars().any(|(key, <span class="kw">_</span>)| key.contains(<span class="string">"RUSTDOC"</span>));
-
-            <span class="kw">if </span>is_test {
-                <span class="kw">let </span>ident = proc_macro2::Ident::new(name, proc_macro2::Span::call_site());
-                <span class="macro">syn::parse_quote!</span>(::#ident)
-            } <span class="kw">else </span>{
-                <span class="macro">syn::parse_quote!</span>(<span class="kw">crate</span>)
-            }
+            <span class="kw">let </span>ident = proc_macro2::Ident::new(name, proc_macro2::Span::call_site());
+            <span class="macro">syn::parse_quote!</span>(::#ident)
         }
-        proc_macro_crate::FoundCrate::Name(name) =&gt; {
-            <span class="kw">let </span>ident = proc_macro2::Ident::new(<span class="kw-2">&amp;</span>name, proc_macro2::Span::call_site());
+        proc_macro_crate::FoundCrate::Name(<span class="kw-2">ref </span>name) =&gt; {
+            <span class="kw">let </span>ident = proc_macro2::Ident::new(name, proc_macro2::Span::call_site());
             <span class="macro">syn::parse_quote!</span>(::#ident)
         }
     }
